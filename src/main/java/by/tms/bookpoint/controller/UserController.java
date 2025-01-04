@@ -1,6 +1,8 @@
 package by.tms.bookpoint.controller;
 
+import by.tms.bookpoint.dto.ErrorResponse;
 import by.tms.bookpoint.model.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,19 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    //ErrorResponse for duplicate user
+//    @PostMapping
+//    public ResponseEntity<?> create(@RequestBody User user) {
+//        for (User user1 : users) {
+//            if (user1.getUsername().equals(user.getUsername())) {
+//                return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Message"), HttpStatus.BAD_REQUEST);
+//            }
+//        }
+//        user.setId(UUID.randomUUID());
+//        users.add(user);
+//        return ResponseEntity.ok(user);
+//    }
+
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users1 = users;
@@ -37,11 +52,36 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
+    //simple
     @DeleteMapping
     public ResponseEntity<User> deleteUser(@RequestBody User user) {
         users.remove(user);
         return ResponseEntity.ok(user);
     }
+
+//    //delete by object User
+//    @DeleteMapping
+//    public ResponseEntity<?> delete(@RequestBody User user) {
+//        for (User user1 : users) {
+//            if (user1.equals(user)) {
+//                users.remove(user1);
+//                return ResponseEntity.ok(user1);
+//            }
+//        }
+//        return ResponseEntity.badRequest().build();
+//    }
+//
+//    //delete by userName
+//    @DeleteMapping("/{username}")
+//    public ResponseEntity<?> delete(@PathVariable("username") String username) {
+//        for (User user1 : users) {
+//            if (user1.getUsername().equals(username)) {
+//                users.remove(user1);
+//                return ResponseEntity.ok(user1);
+//            }
+//        }
+//        return ResponseEntity.badRequest().build();
+//    }
 
     @PutMapping
     public ResponseEntity<User> updateUser(@RequestBody User user) {
