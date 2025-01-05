@@ -10,7 +10,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Staff {
-
+//if will be change, need update PUT staffController
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
