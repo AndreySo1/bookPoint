@@ -14,8 +14,13 @@ public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column (unique = true)
     private String staff_id;
+
     private String name;
+
     private String surname;
+    
     private String password;
 }

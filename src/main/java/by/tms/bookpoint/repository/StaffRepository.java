@@ -14,4 +14,11 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
 
     List<Staff> findAllByName(String name, Sort sort);
 
+    //native SQL not sintaxsis validate
+//    @Query(value = "SELECT * FROM POST WHERE TITLE = :title", nativeQuery = true)
+//    Optional<Post> findByTitleCustom(String title);
+
+    //JPQL
+//    @Query(value = "SELECT p FROM Post p WHERE p.title = :title")
+//    Optional<Post> findByTitleCustom(String title);
 }
