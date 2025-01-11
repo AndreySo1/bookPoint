@@ -27,9 +27,12 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+//                .httpBasic(AbstractHttpConfigurer::disable) //*
+//                .logout(AbstractHttpConfigurer::disable) //*
+//                .formLogin(AbstractHttpConfigurer::disable) //*
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) //db H2 for dev
                 .authorizeHttpRequests(e -> e
-                        .requestMatchers(HttpMethod.POST, "/account/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/account/**", "/auth/**").permitAll()
                         .requestMatchers("/db/**").permitAll() //db H2 for dev
 //                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

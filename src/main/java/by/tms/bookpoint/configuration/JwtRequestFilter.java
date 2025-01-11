@@ -1,5 +1,6 @@
 package by.tms.bookpoint.configuration;
 
+import by.tms.bookpoint.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +21,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtUtils jwtUtils;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("Test JWTRequestFilter");
+//        System.out.println("Test JWTRequestFilter");
         // video 10.02.02
 
         final String authorizationHeader = request.getHeader("Authorization");
@@ -30,11 +31,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //            var username = jwtUtils.extractUsername(jwt); // достать userName из токена если нужно
 
             if (jwtUtils.validateToken(jwt)) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         jwtUtils.getPrincipal(jwt), null, jwtUtils.getPrincipal(jwt).getAuthorities());
-                usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
 

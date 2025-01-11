@@ -4,6 +4,7 @@ import by.tms.bookpoint.entity.Account;
 import by.tms.bookpoint.entity.Role;
 import by.tms.bookpoint.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,7 +32,14 @@ public class AccountService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var byUsername = accountRepository.findByUsername(username);
         if (byUsername.isPresent()) {
-            return byUsername.get();
+//            var acc = byUsername.get();
+//            return User
+//                    .withUsername(acc.getUsername())
+//                    .password(acc.getPassword())
+//                    .roles("USER")
+//                    .build();
+
+            return byUsername.get();// simple
         }
         throw new UsernameNotFoundException(username);
     }
