@@ -27,8 +27,8 @@ public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager; //v2
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder; //v1
 
     @Autowired
     private JwtUtils jwtUtils;

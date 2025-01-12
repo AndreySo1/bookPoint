@@ -27,8 +27,8 @@ public class AccountController {
 
     private final AccountService accountService; //*1 вместо варианта выше , ломбок генерит конструктор
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private  JwtUtils jwtUtils;

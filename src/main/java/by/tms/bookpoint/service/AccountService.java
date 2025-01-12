@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,9 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     public Account create(Account account) {
         account.getAuthorities().add(Role.ROLE_USER);
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        account.setPassword(new BCryptPasswordEncoder(11).encode(account.getPassword()));
         return accountRepository.save(account);
     }
 
@@ -45,7 +43,7 @@ public class AccountService implements UserDetailsService {
             return User
                     .withUsername(acc.getUsername())
                     .password(acc.getPassword())
-                    .roles(Role.ROLE_USER.toString())
+                    .roles("USER")
                     .build();
         }
         throw new UsernameNotFoundException(username);
