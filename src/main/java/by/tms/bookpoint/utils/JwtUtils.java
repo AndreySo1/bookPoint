@@ -15,6 +15,8 @@ import java.util.function.Function;
 public class JwtUtils {
 
     private String SECRET_KEY = "secretKey";
+    private final int TOKEN_EXPIRATION_1H = 1000 * 60 * 60; // 1 hour
+    private final int TOKEN_EXPIRATION_10H = 1000 * 60 * 60 * 10; // 10 hour
 
 //    public Date extractExpiration (String token) {
 //        return extractClaim(token, Claims::getExpiration);
@@ -23,6 +25,10 @@ public class JwtUtils {
 //    private Boolean isTokenExpired(String token) {
 //        return extractExpiration(token).before(new Date());
 //    }
+
+    private boolean isTokenExpired(String token) { //v2
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getExpiration().before(new Date());
+    }
 
 //    public <T> T extractClaim (String token, Function<Claims, T> claimsResolver) {
 //        final Claims claims = extractAllClaims(token);
@@ -33,12 +39,25 @@ public class JwtUtils {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    public String generateToken(Account account) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("id", account.getId());
-        claims.put("roles", account.getAuthorities());
-        claims.put("name", account.getName());
-        return createToken(claims, account.getUsername());
+    public String extractUsername(String token) {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject();
+    }
+
+//    public String generateToken(Account account) { //v1
+//        Map<String, Object> claims = new HashMap<>();
+//        claims.put("id", account.getId());
+//        claims.put("roles", account.getAuthorities());
+//        claims.put("name", account.getName());
+//        return createToken(claims, account.getUsername());
+//    }
+
+    public String generateToken(String username) { //v2 generate + create
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_10H))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
     }
 
 //    public String generateToken(UserDetails userDetails) {
@@ -46,9 +65,13 @@ public class JwtUtils {
 //        return createToken(claims, userDetails.getUsername()); // тлько userName в токине
 //    }
 
-    public Boolean validateToken(String token) {
-        var claims = extractAllClaims(token);
-        return !claims.getExpiration().before(new Date());
+//    public Boolean validateToken(String token) { // v1
+//        var claims = extractAllClaims(token);
+//        return !claims.getExpiration().before(new Date());
+//    }
+
+    public boolean validateToken(String token, String username) { //v2
+        return username.equals(extractUsername(token)) && !isTokenExpired(token);
     }
 
     public Account getPrincipal(String token) {
@@ -75,7 +98,7 @@ public class JwtUtils {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_10H))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
