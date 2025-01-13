@@ -42,9 +42,15 @@ public class SecurityConfiguration {
                 .formLogin(AbstractHttpConfigurer::disable) //*
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) //db H2 for dev
                 .authorizeHttpRequests(e -> e
-                        .requestMatchers(HttpMethod.POST, "/account/**", "/auth/**").permitAll()
-                        .requestMatchers("/db/**").permitAll() //db H2 for dev
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers(SecurityEndpoints.publicALL()).permitAll() //db H2 for dev
+                        .requestMatchers(HttpMethod.GET, SecurityEndpoints.publicGET()).permitAll()
+                        .requestMatchers(HttpMethod.POST, SecurityEndpoints.publicPOST()).permitAll()
+//                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasRole("ADMIN") //как поменять роль подумать
+//                        .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/account/**", "/auth/**").permitAll()
+//                        .requestMatchers("/db/**").permitAll() //db H2 for dev
+//                        .requestMatchers("/admin/**").hasRole("ADMIN") //*
+//                        .requestMatchers("/endpoint").hasAuthority("USER") //*
                         .anyRequest().authenticated())
                 .exceptionHandling(c ->
                         c.authenticationEntryPoint(authenticationEntryPoint())) //не работает , статус 200 без токена

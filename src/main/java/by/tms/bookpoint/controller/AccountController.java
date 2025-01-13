@@ -1,42 +1,106 @@
 package by.tms.bookpoint.controller;
 
+import by.tms.bookpoint.dto.ErrorResponse;
+import by.tms.bookpoint.dto.ErrorResponseMap;
+import by.tms.bookpoint.entity.Staff;
+import by.tms.bookpoint.repository.AccountRepository;
 import by.tms.bookpoint.utils.JwtUtils;
 import by.tms.bookpoint.dto.AuthAccountDto;
 import by.tms.bookpoint.entity.Account;
 import by.tms.bookpoint.service.AccountService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/account")
-@RequiredArgsConstructor //*1 генерация конструктора для всех необходимых полей
+//@RequiredArgsConstructor //*1 генерация конструктора для всех необходимых полей
 public class AccountController {
 
-//    @Autowired
-//    AccountRepository accountRepository;
+    @Autowired
+    private AccountRepository accountRepository;
 
-//    @Autowired
-//    private AccountService accountService;
+    @Autowired
+    private AccountService accountService;
 
-    private final AccountService accountService; //*1 вместо варианта выше , ломбок генерит конструктор
-
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+//    private final AccountService accountService; //*1 вместо варианта выше , ломбок генерит конструктор
 
     @Autowired
     private  JwtUtils jwtUtils;
 
-    @PostMapping
-    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
-        var acc = accountService.create(account);
-//        var acc =accountRepository.save(account);
+    @Operation(summary = "Crate User", description = "Crate User, send request with Account object")
+    @PostMapping("/create")
+    public ResponseEntity<?> createAccount(@RequestBody Account account) {
+        Optional<Account> accountFromDb = accountRepository.findByUsername(account.getUsername());
+        if (accountFromDb.isPresent()){
+            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "User with this Username has already exist"), HttpStatus.BAD_REQUEST);
+        }
+        Account acc = accountService.create(account);
         return new ResponseEntity<>(acc, HttpStatus.CREATED);
+    }
+
+//    @ApiResponse(responseCode = "200", description = "request is successfully") // maybe annotation with @ApiResponse don't need
+//    @ApiResponse(responseCode = "400", description = "Staff Id not found")
+    @Operation(summary = "Find User by Id", description = "Finds User by Id")
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findStaffById(@PathVariable("id") Long id) {
+        Optional<Account> accountFromDb = accountRepository.findById(id);
+        if (accountFromDb.isPresent()){
+            return ResponseEntity.ok(accountFromDb);
+        }
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "User not found"), HttpStatus.BAD_REQUEST);
+    }
+
+    @ApiResponse(responseCode = "200", description = "request is successfully")
+    @ApiResponse(responseCode = "400", description = "Request JSON have fail validation or Staff Id not found")
+    @Operation(summary = "Update Staff by Id", description = "Update Staff by Id, check validate Staff object and exists Id")
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateStaffById(@PathVariable("id") Long id, @Valid @RequestBody Account newAccount, BindingResult bindingResult) {
+        Optional<Account> accountFromDb = accountRepository.findById(id);
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(errorsResponse(bindingResult), HttpStatus.BAD_REQUEST);
+        }
+        if (accountFromDb.isPresent()){
+            Account tempAccount = accountFromDb.get();
+            tempAccount.setName(newAccount.getName());
+            tempAccount.setUsername(newAccount.getUsername());
+            tempAccount.setPassword(newAccount.getPassword());
+            accountRepository.save(tempAccount);
+            return ResponseEntity.ok(tempAccount);
+        }
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "User not found"), HttpStatus.BAD_REQUEST);
+    }
+
+    @Operation(summary = "Delete User by Id", description = "Delete User by Id")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteStaffById(@PathVariable("id") Long id) {
+        Optional<Account> accountFromDb = accountRepository.findById(id);
+        if (accountFromDb.isPresent()){
+            accountRepository.deleteById(id);
+            return ResponseEntity.ok(accountFromDb);
+        }
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "User not found"), HttpStatus.BAD_REQUEST);
+    }
+
+    private ErrorResponseMap errorsResponse (BindingResult bindingResult){
+        ErrorResponseMap errorResponseMap = new ErrorResponseMap();
+        List<String> errors = new ArrayList<>();
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+            errors.add(fieldError.getDefaultMessage());
+            errorResponseMap.getErrors().put(fieldError.getField(), errors);
+        }
+        return errorResponseMap;
     }
 }

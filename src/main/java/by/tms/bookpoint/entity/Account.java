@@ -1,6 +1,9 @@
 package by.tms.bookpoint.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,8 +24,21 @@ public class Account implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    @NotEmpty
+    @NotBlank
     private String name;
+
+    @Column (unique = true)
+    @NotNull
+    @NotEmpty
+    @NotBlank
     private String username;
+
+    @NotNull
+    @NotEmpty
+    @NotBlank
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
