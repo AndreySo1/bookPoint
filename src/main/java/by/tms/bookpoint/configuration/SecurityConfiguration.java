@@ -45,7 +45,8 @@ public class SecurityConfiguration {
                         .requestMatchers(SecurityEndpoints.publicALL()).permitAll() //db H2 for dev
                         .requestMatchers(HttpMethod.GET, SecurityEndpoints.publicGET()).permitAll()
                         .requestMatchers(HttpMethod.POST, SecurityEndpoints.publicPOST()).permitAll()
-//                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasRole("ADMIN") //как поменять роль подумать
+//                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
 //                        .requestMatchers(HttpMethod.POST, "/account/**", "/auth/**").permitAll()
 //                        .requestMatchers("/db/**").permitAll() //db H2 for dev

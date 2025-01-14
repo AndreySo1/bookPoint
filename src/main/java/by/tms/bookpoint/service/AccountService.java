@@ -21,7 +21,7 @@ public class AccountService implements UserDetailsService {
     private AccountRepository accountRepository;
 
     public Account create(Account account) {
-        account.getAuthorities().add(Role.ROLE_USER);
+        account.getAuthorities().add(Role.USER);
         account.setPassword(new BCryptPasswordEncoder(11).encode(account.getPassword()));
         return accountRepository.save(account);
     }
@@ -43,7 +43,8 @@ public class AccountService implements UserDetailsService {
             return User
                     .withUsername(acc.getUsername())
                     .password(acc.getPassword())
-                    .roles("USER")
+                    .roles(acc.getAuthorities().stream().map(Role::name).toArray(String[]::new)) // Role_ + ["USER", "ADMIN"]
+//                    .authorities(acc.getAuthorities()) //["USER", "ADMIN"] без добавления Role_
                     .build();
         }
         throw new UsernameNotFoundException(username);

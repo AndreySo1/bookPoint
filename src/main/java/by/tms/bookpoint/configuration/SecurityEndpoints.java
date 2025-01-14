@@ -13,7 +13,8 @@ public class SecurityEndpoints {
     }
     public static String[] publicGET() {
         return new String[]{
-                "/api/health"
+                "/api/health",
+                "/account/**"
         };
     }
 
@@ -24,11 +25,13 @@ public class SecurityEndpoints {
         };
     }
 
-    public static String[] adminDELETED() {
+    public static String[] adminDELETE() {
         return new String[]{
-                "/admin/**"
+                "/account/**"
         };
     }
+
+    //UPDATE ACCOUNT_AUTHORITIES SET AUTHORITIES='1' WHERE ACCOUNT_ID=2;
 
 //    public static String[] allPublicEndpoints() {
 //        return Arrays.stream(new String[][]{

@@ -74,24 +74,24 @@ public class JwtUtils {
         return username.equals(extractUsername(token)) && !isTokenExpired(token);
     }
 
-    public Account getPrincipal(String token) {
-        Claims claims = extractAllClaims(token);
-        var roles = (List<String>) claims.get("roles");
-        var id = (Integer) claims.get("id");
-        var name = (String) claims.get("name");
-        var username = claims.getSubject();
-        var account = new Account();
-        account.setId(Long.valueOf(id));
-        account.setUsername(username);
-        account.setName(name);
-
-        Set<Role> roleSet = new HashSet<>();
-
-        roles.forEach(role -> roleSet.add(Role.valueOf(role)));
-
-        account.setAuthorities(new HashSet<>(roleSet));
-        return account;
-    }
+//    public Account getPrincipal(String token) {
+//        Claims claims = extractAllClaims(token);
+//        var roles = (List<String>) claims.get("roles");
+//        var id = (Integer) claims.get("id");
+//        var name = (String) claims.get("name");
+//        var username = claims.getSubject();
+//        var account = new Account();
+//        account.setId(Long.valueOf(id));
+//        account.setUsername(username);
+//        account.setName(name);
+//
+//        Set<Role> roleSet = new HashSet<>();
+//
+//        roles.forEach(role -> roleSet.add(Role.valueOf(role)));
+//
+//        account.setAuthorities(new HashSet<>(roleSet));
+//        return account;
+//    }
 
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
