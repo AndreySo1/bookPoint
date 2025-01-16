@@ -8,11 +8,13 @@ public class SecurityEndpoints {
     public static String[] publicALL() {
         return new String[]{
                 "/db/**", //db H2 for dev
-//                "/account/**" // delete after test
+//                "/account/**", // delete after test
+                "/room/**"// delete after test
         };
     }
     public static String[] publicGET() {
         return new String[]{
+                "/",
                 "/api/health",
                 "/account/**"
         };

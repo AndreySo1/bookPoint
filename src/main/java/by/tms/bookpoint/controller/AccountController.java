@@ -2,8 +2,8 @@ package by.tms.bookpoint.controller;
 
 import by.tms.bookpoint.dto.ErrorResponse;
 import by.tms.bookpoint.dto.ErrorResponseMap;
-import by.tms.bookpoint.entity.Staff;
 import by.tms.bookpoint.repository.AccountRepository;
+import by.tms.bookpoint.utils.ErrorsUtils;
 import by.tms.bookpoint.utils.JwtUtils;
 import by.tms.bookpoint.dto.AuthAccountDto;
 import by.tms.bookpoint.entity.Account;
@@ -40,18 +40,17 @@ public class AccountController {
     @Autowired
     private  JwtUtils jwtUtils;
 
-    @Operation(summary = "Crate User", description = "Crate User, send request with Account object")
-    @PostMapping("/create")
-    public ResponseEntity<?> createAccount(@RequestBody Account account) {
-        Optional<Account> accountFromDb = accountRepository.findByUsername(account.getUsername());
-        if (accountFromDb.isPresent()){
-            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "User with this Username has already exist"), HttpStatus.BAD_REQUEST);
-        }
-        Account acc = accountService.create(account);
-        return new ResponseEntity<>(acc, HttpStatus.CREATED);
+    @Autowired
+    private ErrorsUtils errorsUtils;
+
+    @Operation(summary = "Find all User", description = "Find all User")
+    @GetMapping("/all")
+    public ResponseEntity<List<Account>> all() {
+        var all = accountRepository.findAll();
+        return ResponseEntity.ok(all);
     }
 
-//    @ApiResponse(responseCode = "200", description = "request is successfully") // maybe annotation with @ApiResponse don't need
+    //    @ApiResponse(responseCode = "200", description = "request is successfully") // maybe annotation with @ApiResponse don't need
 //    @ApiResponse(responseCode = "400", description = "Staff Id not found")
     @Operation(summary = "Find User by Id", description = "Finds User by Id")
     @GetMapping("/{id}")
@@ -63,6 +62,17 @@ public class AccountController {
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "User not found"), HttpStatus.BAD_REQUEST);
     }
 
+    @Operation(summary = "Crate User", description = "Crate User, send request with Account object")
+    @PostMapping("/create")
+    public ResponseEntity<?> createAccount(@RequestBody Account account) {
+        Optional<Account> accountFromDb = accountRepository.findByUsername(account.getUsername());
+        if (accountFromDb.isPresent()){
+            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "User with this Username has already exist"), HttpStatus.BAD_REQUEST);
+        }
+        Account acc = accountService.create(account);
+        return new ResponseEntity<>(acc, HttpStatus.CREATED);
+    }
+
     @ApiResponse(responseCode = "200", description = "request is successfully")
     @ApiResponse(responseCode = "400", description = "Request JSON have fail validation or Staff Id not found")
     @Operation(summary = "Update Staff by Id", description = "Update Staff by Id, check validate Staff object and exists Id")
@@ -70,7 +80,7 @@ public class AccountController {
     public ResponseEntity<?> updateStaffById(@PathVariable("id") Long id, @Valid @RequestBody Account newAccount, BindingResult bindingResult) {
         Optional<Account> accountFromDb = accountRepository.findById(id);
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(errorsResponse(bindingResult), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(errorsUtils.errorsResponse(bindingResult), HttpStatus.BAD_REQUEST);
         }
         if (accountFromDb.isPresent()){
             Account tempAccount = accountFromDb.get();
@@ -94,13 +104,13 @@ public class AccountController {
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "User not found"), HttpStatus.BAD_REQUEST);
     }
 
-    private ErrorResponseMap errorsResponse (BindingResult bindingResult){
-        ErrorResponseMap errorResponseMap = new ErrorResponseMap();
-        List<String> errors = new ArrayList<>();
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            errors.add(fieldError.getDefaultMessage());
-            errorResponseMap.getErrors().put(fieldError.getField(), errors);
-        }
-        return errorResponseMap;
-    }
+//    private ErrorResponseMap errorsResponse (BindingResult bindingResult){
+//        ErrorResponseMap errorResponseMap = new ErrorResponseMap();
+//        List<String> errors = new ArrayList<>();
+//        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+//            errors.add(fieldError.getDefaultMessage());
+//            errorResponseMap.getErrors().put(fieldError.getField(), errors);
+//        }
+//        return errorResponseMap;
+//    }
 }
