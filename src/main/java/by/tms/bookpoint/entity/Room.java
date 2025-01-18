@@ -28,6 +28,6 @@ public class Room { //Room (id, name,points *location)
     @NotBlank
     private String name;
 
-    @ElementCollection(fetch = FetchType.EAGER) // настроить связи один ко многим
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true) //orphanRemoval если удаляем из списка, удалится и из Point
     private List<Point> points = new ArrayList<>();
 }

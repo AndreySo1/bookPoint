@@ -7,16 +7,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Date;
 
 @Entity
 @Setter
 @Getter
 @ToString
-public class Account implements UserDetails {
+public class Booking {  //Booking (id, roomId, accountId, date, startTime, endTime).
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,19 +23,16 @@ public class Account implements UserDetails {
     @NotNull
     @NotEmpty
     @NotBlank
-    private String name;
-
-    @Column (unique = true)
-    @NotNull
-    @NotEmpty
-    @NotBlank
-    private String username;
+    private Long roomId;
 
     @NotNull
     @NotEmpty
     @NotBlank
-    private String password;
+    private Long accountId;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Set<Role> authorities = new HashSet<>();
+    private Date date;
+
+    private Date startTime;
+
+    private Date endTime;
 }

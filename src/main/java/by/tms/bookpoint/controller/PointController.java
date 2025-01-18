@@ -4,6 +4,8 @@ import by.tms.bookpoint.dto.ErrorResponse;
 import by.tms.bookpoint.entity.Point;
 import by.tms.bookpoint.entity.Room;
 import by.tms.bookpoint.repository.PointRepository;
+import by.tms.bookpoint.repository.RoomRepository;
+import by.tms.bookpoint.service.PointService;
 import by.tms.bookpoint.utils.ErrorsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,12 @@ public class PointController {
 
     @Autowired
     private PointRepository pointRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
+
+    @Autowired
+    private PointService pointService;
 
     @Autowired
     private ErrorsUtils errorsUtils;
@@ -46,12 +54,14 @@ public class PointController {
     @PostMapping("/create")
     public ResponseEntity<?> createPoint(@PathVariable("roomId") Long roomId, @RequestBody Point point) {
         //проверить совпадение roomID из запроса и из обьекта передоваемого
-        Optional<Point> pointFromDb = pointRepository.findPointByRoomIdAndNumber(point.getRoomId(), point.getNumber());
-        if (pointFromDb.isPresent()){
-            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point with this RoomId and Number already exist"), HttpStatus.BAD_REQUEST);
-        }
-        Point newPoint = pointRepository.save(point);
-        return new ResponseEntity<>(newPoint, HttpStatus.CREATED);
+        Point newPoint = pointService.createPoint(roomId, point);
+//        Optional<Point> pointFromDb = pointRepository.findPointByRoomIdAndNumber(point.getRoomId(), point.getNumber());
+//        if (pointFromDb.isPresent()){
+//            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point with this RoomId and Number already exist"), HttpStatus.BAD_REQUEST);
+//        }
+//        Point newPoint = pointRepository.save(point);
+//        return new ResponseEntity<>(newPoint, HttpStatus.CREATED);
+        return ResponseEntity.ok(newPoint);
     }
 
     /*обновить после пока у Point нет полей которыне можно обновить*/
@@ -71,16 +81,16 @@ public class PointController {
 //        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point with this RoomId and Number already exist"), HttpStatus.BAD_REQUEST);
 //    }
 
-    // Удалить рабочее место
-    @DeleteMapping("/{number}")
-    public ResponseEntity<?> deleteDeskByNumber(@PathVariable("roomId") Long roomId, @PathVariable("number") Integer number) {
-        Optional<Point> pointFromDb = pointRepository.findPointByRoomIdAndNumber(roomId, number);
-        if (pointFromDb.isPresent()){
-            pointRepository.deletePointByRoomIdAndNumber(roomId, number);
-            return ResponseEntity.ok(pointFromDb);
-        }
-        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point not found"), HttpStatus.BAD_REQUEST);
-    }
+//    // Удалить рабочее место
+//    @DeleteMapping("/{number}")
+//    public ResponseEntity<?> deleteDeskByNumber(@PathVariable("roomId") Long roomId, @PathVariable("number") Integer number) {
+//        Optional<Point> pointFromDb = pointRepository.findPointByRoomIdAndNumber(roomId, number);
+//        if (pointFromDb.isPresent()){
+//            pointRepository.deletePointByRoomIdAndNumber(roomId, number);
+//            return ResponseEntity.ok(pointFromDb);
+//        }
+//        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point not found"), HttpStatus.BAD_REQUEST);
+//    }
 
 //    // Проверить доступность рабочего места
 //    @GetMapping("/{deskId}/availability")

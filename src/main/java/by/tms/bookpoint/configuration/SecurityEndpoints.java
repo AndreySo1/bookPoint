@@ -23,6 +23,7 @@ public class SecurityEndpoints {
     public static String[] publicPOST() {
         return new String[]{
                 "/account/**",
+                "/room/1/point/**",
                 "/auth/**"
         };
     }
