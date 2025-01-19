@@ -7,7 +7,9 @@ import by.tms.bookpoint.repository.PointRepository;
 import by.tms.bookpoint.repository.RoomRepository;
 import by.tms.bookpoint.service.PointService;
 import by.tms.bookpoint.utils.ErrorsUtils;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -52,16 +54,19 @@ public class PointController {
 
     // Добавить место в комнату
     @PostMapping("/create")
-    public ResponseEntity<?> createPoint(@PathVariable("roomId") Long roomId, @RequestBody Point point) {
+    public ResponseEntity<?> createPoint(@PathVariable("roomId") Long roomId, @Valid @RequestBody Point point) {
         //проверить совпадение roomID из запроса и из обьекта передоваемого
-        Point newPoint = pointService.createPoint(roomId, point);
+        Point newPoint = pointService.createPoint(roomId, point); //v2
+
 //        Optional<Point> pointFromDb = pointRepository.findPointByRoomIdAndNumber(point.getRoomId(), point.getNumber());
 //        if (pointFromDb.isPresent()){
 //            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point with this RoomId and Number already exist"), HttpStatus.BAD_REQUEST);
 //        }
 //        Point newPoint = pointRepository.save(point);
 //        return new ResponseEntity<>(newPoint, HttpStatus.CREATED);
-        return ResponseEntity.ok(newPoint);
+
+//        return ResponseEntity.ok(newPoint);//v2
+        return ResponseEntity.status(HttpStatus.CREATED).body(newPoint);// сделать чтобы выводило респонс ошибки как при create room
     }
 
     /*обновить после пока у Point нет полей которыне можно обновить*/

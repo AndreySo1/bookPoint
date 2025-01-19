@@ -13,25 +13,26 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"room_id", "number"})) // уникальность свзяки полей
 public class Point { //Point (id, roomId, number, *type).
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true) // не подойдет, может быть одинаковый номер в разных комнатах
+//    @Column(unique = true) // не подойдет, может быть одинаковый номер в разных комнатах
     @NotNull
 //    @NotEmpty
 //    @NotBlank
     private Integer number;
 
 //    @NotNull
-//    @NotEmpty
-//    @NotBlank
+////    @NotEmpty
+////    @NotBlank
 //    @JoinColumn(name = "room_id", nullable = false) // Связываем с Room
 //    private Long roomId;
 
-    @ManyToOne
+    @ManyToOne//v2
     @JoinColumn(name = "room_id", nullable = false) // Связываем с Room
     @JsonIgnore //чтобы не зацикливалось в респонссе
     private Room room;
