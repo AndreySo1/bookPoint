@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Setter
 @Getter
@@ -22,8 +25,6 @@ public class Point { //Point (id, roomId, number, *type).
 
 //    @Column(unique = true) // не подойдет, может быть одинаковый номер в разных комнатах
     @NotNull
-//    @NotEmpty
-//    @NotBlank
     private Integer number;
 
 //    @NotNull
@@ -36,4 +37,7 @@ public class Point { //Point (id, roomId, number, *type).
     @JoinColumn(name = "room_id", nullable = false) // Связываем с Room
     @JsonIgnore //чтобы не зацикливалось в респонссе
     private Room room;
+
+    @OneToMany(mappedBy = "point", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Booking> bookings = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package by.tms.bookpoint.controller;
 
+import by.tms.bookpoint.dto.ErrorResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +18,11 @@ public class GlobalExceptionHandler {
 //                .body(errorMessage);
 //    }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
+    @ExceptionHandler(RuntimeException.class) // чтобы выводить респонсе ошибки в формате ErrorResponse
+    public ResponseEntity<?> handleRuntimeException(RuntimeException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST) // HTTP 400 Bad Request
-                .body(e.getMessage());
+                .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
     }
 }
 

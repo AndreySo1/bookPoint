@@ -9,7 +9,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -40,4 +42,7 @@ public class Account implements UserDetails {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> authorities = new HashSet<>();
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Booking> bookings = new ArrayList<>();
 }

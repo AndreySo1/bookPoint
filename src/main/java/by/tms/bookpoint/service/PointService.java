@@ -5,8 +5,8 @@ import by.tms.bookpoint.entity.Room;
 import by.tms.bookpoint.repository.PointRepository;
 import by.tms.bookpoint.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -26,7 +26,6 @@ public class PointService {
                 .orElseThrow(() -> new RuntimeException("Room not found"));
 
         //проверяем есть ли в Room такой number
-//        Optional<Point> pointInDb = pointRepository.findPointByRoomAndNumber(room, point.getNumber());
         Optional<Point> pointInDb = pointRepository.findByRoomAndNumber(room, point.getNumber());
         if (pointInDb.isPresent()) {
             throw new RuntimeException("Point with this number already exists in the room");
@@ -41,11 +40,10 @@ public class PointService {
         point.setRoom(room);
 
         return pointRepository.save(point); //v1
+    }
 
-//        try { //если в entity Point исспользуем uniqueConstraints
-//            return pointRepository.save(point);
-//        } catch (DataIntegrityViolationException e) {
-//            throw new RuntimeException("Point with this number already exists in the room", e);
-//        }
+    @Transactional
+    public void deletePointByRoomAndNumber(Room room, Integer number) {
+        pointRepository.deleteByRoomAndNumber(room, number);
     }
 }

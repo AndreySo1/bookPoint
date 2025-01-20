@@ -9,7 +9,8 @@ public class SecurityEndpoints {
         return new String[]{
                 "/db/**", //db H2 for dev
 //                "/account/**", // delete after test
-                "/room/**"// delete after test
+                "/room/**",// delete after test
+                "/booking/**"// delete after test
         };
     }
     public static String[] publicGET() {

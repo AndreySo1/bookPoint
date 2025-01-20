@@ -36,7 +36,7 @@ public class PointController {
 
     // Получить список всех мест в комнате
     @GetMapping("/all")
-    public ResponseEntity<List<Point>> getAllPointByRoomId(@PathVariable("roomId") Long roomId) {
+    public ResponseEntity<List<Point>> getAllPointsByRoomId(@PathVariable("roomId") Long roomId) {
         var all = pointRepository.findAllByRoomId(roomId);
         return ResponseEntity.ok(all);
     }
@@ -49,14 +49,13 @@ public class PointController {
             return ResponseEntity.ok(pointFromDb);
         }
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point not found"), HttpStatus.BAD_REQUEST);
-
     }
 
     // Добавить место в комнату
     @PostMapping("/create")
     public ResponseEntity<?> createPoint(@PathVariable("roomId") Long roomId, @Valid @RequestBody Point point) {
         //проверить совпадение roomID из запроса и из обьекта передоваемого
-        Point newPoint = pointService.createPoint(roomId, point); //v2
+        Point newPoint = pointService.createPoint(roomId, point); //v2 poinService
 
 //        Optional<Point> pointFromDb = pointRepository.findPointByRoomIdAndNumber(point.getRoomId(), point.getNumber());
 //        if (pointFromDb.isPresent()){
@@ -65,7 +64,6 @@ public class PointController {
 //        Point newPoint = pointRepository.save(point);
 //        return new ResponseEntity<>(newPoint, HttpStatus.CREATED);
 
-//        return ResponseEntity.ok(newPoint);//v2
         return ResponseEntity.status(HttpStatus.CREATED).body(newPoint);// сделать чтобы выводило респонс ошибки как при create room
     }
 
@@ -86,16 +84,17 @@ public class PointController {
 //        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point with this RoomId and Number already exist"), HttpStatus.BAD_REQUEST);
 //    }
 
-//    // Удалить рабочее место
-//    @DeleteMapping("/{number}")
-//    public ResponseEntity<?> deleteDeskByNumber(@PathVariable("roomId") Long roomId, @PathVariable("number") Integer number) {
-//        Optional<Point> pointFromDb = pointRepository.findPointByRoomIdAndNumber(roomId, number);
-//        if (pointFromDb.isPresent()){
-//            pointRepository.deletePointByRoomIdAndNumber(roomId, number);
-//            return ResponseEntity.ok(pointFromDb);
-//        }
-//        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point not found"), HttpStatus.BAD_REQUEST);
-//    }
+    // Удалить рабочее место
+    @DeleteMapping("/{number}")
+    public ResponseEntity<?> deleteDeskByNumber(@PathVariable("roomId") Long roomId, @PathVariable("number") Integer number) {
+        Optional<Point> pointFromDb = pointRepository.findPointByRoomIdAndNumber(roomId, number);
+        Room roomFromPoint = pointFromDb.get().getRoom();
+        if (pointFromDb.isPresent()){
+            pointService.deletePointByRoomAndNumber(roomFromPoint, number);
+            return ResponseEntity.ok(pointFromDb);
+        }
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point not found"), HttpStatus.BAD_REQUEST);
+    }
 
 //    // Проверить доступность рабочего места
 //    @GetMapping("/{deskId}/availability")

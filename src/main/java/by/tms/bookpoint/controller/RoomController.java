@@ -43,7 +43,7 @@ public class RoomController {
 
     // Добавить новую комнату
     @PostMapping("/create")
-    public ResponseEntity<?> createRoom(@RequestBody Room room) {
+    public ResponseEntity<?> createRoom(@Valid @RequestBody Room room) {
         Optional<Room> roomFromDb = roomRepository.findByName(room.getName());
         if (roomFromDb.isPresent()){
             return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Room with this Name has already exist"), HttpStatus.BAD_REQUEST);
