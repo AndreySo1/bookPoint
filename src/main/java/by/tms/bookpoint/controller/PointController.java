@@ -64,7 +64,7 @@ public class PointController {
 //        Point newPoint = pointRepository.save(point);
 //        return new ResponseEntity<>(newPoint, HttpStatus.CREATED);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(newPoint);// сделать чтобы выводило респонс ошибки как при create room
+        return ResponseEntity.status(HttpStatus.CREATED).body(newPoint);// через ExceptionHAndler ошибка приходит в виде dtoResponseErr
     }
 
     /*обновить после пока у Point нет полей которыне можно обновить*/
@@ -81,7 +81,7 @@ public class PointController {
 //            pointRepository.save(tempPoint);
 //            return ResponseEntity.ok(tempPoint);
 //        }
-//        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point with this RoomId and Number already exist"), HttpStatus.BAD_REQUEST);
+//        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point with this RoomId and Number not found"), HttpStatus.BAD_REQUEST);
 //    }
 
     // Удалить рабочее место

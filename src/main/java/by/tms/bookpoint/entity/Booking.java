@@ -1,5 +1,6 @@
 package by.tms.bookpoint.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +17,7 @@ import java.util.Date;
 @Setter
 @Getter
 @ToString
-public class Booking {  //Booking (id, pointId, accountId, *date, startTime, endTime).
+public class Booking {  //Booking (id, point, account, *date, startTime, endTime).
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +25,14 @@ public class Booking {  //Booking (id, pointId, accountId, *date, startTime, end
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "desk_id", nullable = false)
+    @JoinColumn(name = "point_id", nullable = false)
+    @JsonIgnore //чтобы не зацикливалось в респонссе
     private Point point;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
+    @JsonIgnore //чтобы не зацикливалось в респонссе
     private Account account;
 
 //    private LocalDateTime date;

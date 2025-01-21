@@ -82,7 +82,7 @@ public class AccountController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(errorsUtils.errorsResponse(bindingResult), HttpStatus.BAD_REQUEST);
         }
-        if (accountFromDb.isPresent()){
+        if (accountFromDb.isPresent()){ //вынести в AccountService
             Account tempAccount = accountFromDb.get();
             tempAccount.setName(newAccount.getName());
             tempAccount.setUsername(newAccount.getUsername());
