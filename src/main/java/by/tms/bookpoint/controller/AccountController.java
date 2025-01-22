@@ -104,13 +104,4 @@ public class AccountController {
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "User not found"), HttpStatus.BAD_REQUEST);
     }
 
-//    private ErrorResponseMap errorsResponse (BindingResult bindingResult){
-//        ErrorResponseMap errorResponseMap = new ErrorResponseMap();
-//        List<String> errors = new ArrayList<>();
-//        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-//            errors.add(fieldError.getDefaultMessage());
-//            errorResponseMap.getErrors().put(fieldError.getField(), errors);
-//        }
-//        return errorResponseMap;
-//    }
 }

@@ -2,8 +2,6 @@ package by.tms.bookpoint.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,12 +24,6 @@ public class Point { //Point (id, roomId, number, *type).
 //    @Column(unique = true) // не подойдет, может быть одинаковый номер в разных комнатах
     @NotNull
     private Integer number;
-
-//    @NotNull
-////    @NotEmpty
-////    @NotBlank
-//    @JoinColumn(name = "room_id", nullable = false) // Связываем с Room
-//    private Long roomId;
 
     @ManyToOne//v2
     @JoinColumn(name = "room_id", nullable = false) // Связываем с Room

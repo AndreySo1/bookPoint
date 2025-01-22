@@ -67,7 +67,6 @@ public class RoomController {
             return ResponseEntity.ok(tempRoom);
         }
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Room not found"), HttpStatus.BAD_REQUEST);
-
     }
 
     // Удалить комнату

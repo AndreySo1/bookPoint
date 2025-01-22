@@ -56,14 +56,6 @@ public class PointController {
     public ResponseEntity<?> createPoint(@PathVariable("roomId") Long roomId, @Valid @RequestBody Point point) {
         //проверить совпадение roomID из запроса и из обьекта передоваемого
         Point newPoint = pointService.createPoint(roomId, point); //v2 poinService
-
-//        Optional<Point> pointFromDb = pointRepository.findPointByRoomIdAndNumber(point.getRoomId(), point.getNumber());
-//        if (pointFromDb.isPresent()){
-//            return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point with this RoomId and Number already exist"), HttpStatus.BAD_REQUEST);
-//        }
-//        Point newPoint = pointRepository.save(point);
-//        return new ResponseEntity<>(newPoint, HttpStatus.CREATED);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(newPoint);// через ExceptionHAndler ошибка приходит в виде dtoResponseErr
     }
 

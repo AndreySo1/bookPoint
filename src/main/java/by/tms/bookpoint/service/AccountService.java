@@ -26,15 +26,6 @@ public class AccountService implements UserDetailsService {
         return accountRepository.save(account);
     }
 
-//    @Override // v1
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        var byUsername = accountRepository.findByUsername(username);
-//        if (byUsername.isPresent()) {
-//            return byUsername.get();// simple
-//        }
-//        throw new UsernameNotFoundException(username);
-//    }
-
     @Override //v2
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var byUsername = accountRepository.findByUsername(username);

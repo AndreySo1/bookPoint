@@ -82,10 +82,6 @@ public class StaffController {
 
         staffRepository.save(staff);
         return ResponseEntity.ok(staff);
-
-        //or
-//        var save = staffRepository.save(staff);
-//        return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
 
     @ApiResponse(responseCode = "200", description = "request is successfully")
