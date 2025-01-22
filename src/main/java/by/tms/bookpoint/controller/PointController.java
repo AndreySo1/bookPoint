@@ -1,5 +1,6 @@
 package by.tms.bookpoint.controller;
 
+import by.tms.bookpoint.dto.BookingTimeDto;
 import by.tms.bookpoint.dto.ErrorResponse;
 import by.tms.bookpoint.entity.Point;
 import by.tms.bookpoint.entity.Room;
@@ -7,6 +8,7 @@ import by.tms.bookpoint.repository.PointRepository;
 import by.tms.bookpoint.repository.RoomRepository;
 import by.tms.bookpoint.service.PointService;
 import by.tms.bookpoint.utils.ErrorsUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "Point Resource")
 @RestController
 @RequestMapping("/room/{roomId}/point")
 public class PointController {
@@ -88,10 +91,9 @@ public class PointController {
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Point not found"), HttpStatus.BAD_REQUEST);
     }
 
-//    // Проверить доступность рабочего места
-//    @GetMapping("/{deskId}/availability")
-//    public boolean checkDeskAvailability(@PathVariable Long roomId, @PathVariable Long deskId,
-//                                         @RequestParam String date, @RequestParam String time) {
-//        // Логика для проверки доступности рабочего места
-//    }
+    // Проверить доступность рабочего места
+    @PostMapping("/{pointId}/available") // можно GET и передавать время через @RequestParam ?
+    public boolean checkPointAvailabilityById(@PathVariable("roomId") Long roomId, @PathVariable("pointId") Long pointId, @Valid @RequestBody BookingTimeDto bookingTimeDto) {
+        return pointService.isAvailablePoint(roomId, pointId, bookingTimeDto);
+    }
 }

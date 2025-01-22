@@ -1,7 +1,9 @@
 package by.tms.bookpoint.service;
 
+import by.tms.bookpoint.dto.BookingTimeDto;
 import by.tms.bookpoint.entity.Point;
 import by.tms.bookpoint.entity.Room;
+import by.tms.bookpoint.repository.BookingRepository;
 import by.tms.bookpoint.repository.PointRepository;
 import by.tms.bookpoint.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class PointService {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;
 
     public Point createPoint(Long roomId, Point point) {
 
@@ -45,5 +50,25 @@ public class PointService {
     @Transactional
     public void deletePointByRoomAndNumber(Room room, Integer number) {
         pointRepository.deleteByRoomAndNumber(room, number);
+    }
+
+    public Boolean isAvailablePoint(Long roomId, Long pointId, BookingTimeDto bookingTimeDto){
+//        // Ищем Room по ID
+//        Room room = roomRepository.findById(roomId)
+//                .orElseThrow(() -> new RuntimeException("Room not found"));
+
+//        Point point = pointRepository.findById(pointId)
+//                .orElseThrow(() -> new IllegalArgumentException("Point not found"));
+
+//        Point point = pointRepository.findByRoomAndId(room, pointId)
+//                .orElseThrow(() -> new IllegalArgumentException("Point not found in this room"));
+
+        Point point = pointRepository.findPointByRoomIdAndId(roomId, pointId)
+                .orElseThrow(() -> new IllegalArgumentException("Point not found in this room"));
+
+        boolean isOverlayTime= bookingRepository.existsByPointAndTimeRange(
+                pointId, bookingTimeDto.getStartTime(), bookingTimeDto.getEndTime());
+
+        return !isOverlayTime; //если найдены пересеения на этот интервал вернем false
     }
 }

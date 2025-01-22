@@ -1,4 +1,4 @@
-package by.tms.bookpoint.controller;
+package by.tms.bookpoint.configuration;
 
 import by.tms.bookpoint.dto.ErrorResponse;
 import org.springframework.dao.DataIntegrityViolationException;

@@ -42,9 +42,10 @@ public class SecurityConfiguration {
                 .formLogin(AbstractHttpConfigurer::disable) //*
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) //db H2 for dev
                 .authorizeHttpRequests(e -> e
-                        .requestMatchers(SecurityEndpoints.publicALL()).permitAll() //db H2 for dev
+//                        .requestMatchers(SecurityEndpoints.publicALL()).permitAll() //db H2 for dev
                         .requestMatchers(HttpMethod.GET, SecurityEndpoints.publicGET()).permitAll()
                         .requestMatchers(HttpMethod.POST, SecurityEndpoints.publicPOST()).permitAll()
+                        .requestMatchers(SecurityEndpoints.publicALL()).permitAll() //db H2 for dev
 //                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/account/**").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.GET, "/api/health").permitAll()

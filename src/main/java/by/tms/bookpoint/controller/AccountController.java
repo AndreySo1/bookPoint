@@ -10,6 +10,7 @@ import by.tms.bookpoint.entity.Account;
 import by.tms.bookpoint.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "Account Resource")
 @RestController
 @RequestMapping("/account")
 //@RequiredArgsConstructor //*1 генерация конструктора для всех необходимых полей

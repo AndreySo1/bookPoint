@@ -1,9 +1,11 @@
 package by.tms.bookpoint.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Test Greeting Resource")
 @RestController
 @RequestMapping("/greeting")
 public class GreetingController {

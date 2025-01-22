@@ -10,13 +10,19 @@ public class SecurityEndpoints {
                 "/db/**", //db H2 for dev
 //                "/account/**", // delete after test
                 "/room/**",// delete after test
-                "/booking/**"// delete after test
+                "/booking/**",// delete after test
+                "/api/**",// access to Sagger
+                "/doc/**",// access to Sagger
+                "/swagger-ui/**",// access to Sagger
+                "/v3/api-docs/**",    // Документация OpenAPI
+                "/swagger-ui/**",     // Swagger UI HTML и JS файлы
+                "/swagger-ui.html"
         };
     }
     public static String[] publicGET() {
         return new String[]{
                 "/",
-                "/api/health",
+//                "/api/health",
                 "/account/**"
         };
     }

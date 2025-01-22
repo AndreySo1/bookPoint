@@ -1,6 +1,7 @@
 package by.tms.bookpoint.service;
 
 import by.tms.bookpoint.dto.BookingRequestDto;
+import by.tms.bookpoint.dto.BookingTimeDto;
 import by.tms.bookpoint.entity.Account;
 import by.tms.bookpoint.entity.Booking;
 import by.tms.bookpoint.entity.Point;
@@ -44,10 +45,10 @@ public class BookingService {
                 .orElseThrow(() -> new IllegalArgumentException("Account not found"));
 
         //проверяем есть  ли уже брони на это время
-        boolean isOverlay = bookingRepository.existsByPointAndTimeRange(
+        boolean isOverlayTime = bookingRepository.existsByPointAndTimeRange(
                 point.getId(), booking.getStartTime(), booking.getEndTime());
-        if (isOverlay) {
-            throw new IllegalArgumentException("Point is already booked for the selected time range");
+        if (isOverlayTime) {
+            throw new IllegalArgumentException("Other point is already booked for the selected time range");
         }
 
 //        // Устанавливаем связанные сущности

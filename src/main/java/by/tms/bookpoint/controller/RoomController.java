@@ -4,6 +4,7 @@ import by.tms.bookpoint.dto.ErrorResponse;
 import by.tms.bookpoint.entity.Room;
 import by.tms.bookpoint.repository.RoomRepository;
 import by.tms.bookpoint.utils.ErrorsUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "Room Resource")
 @RestController
 @RequestMapping("/room")
 public class RoomController {

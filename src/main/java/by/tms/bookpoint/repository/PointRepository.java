@@ -20,6 +20,8 @@ public interface PointRepository extends JpaRepository<Point, Long> {
 
     Optional<Point> findByRoomAndNumber(Room room, Integer number);
 
+    Optional<Point> findByRoomAndId(Room room, Long pointId);
+
     Optional<Point> deletePointByRoomIdAndNumber(Long roomId, Integer number);
     Optional<Point> deleteByRoomAndNumber(Room room, Integer number);
 }
