@@ -8,6 +8,7 @@ import by.tms.bookpoint.repository.PointRepository;
 import by.tms.bookpoint.repository.RoomRepository;
 import by.tms.bookpoint.service.PointService;
 import by.tms.bookpoint.utils.ErrorsUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ public class PointController {
     private ErrorsUtils errorsUtils;
 
     // Получить список всех мест в комнате
+    @Operation(summary = "Get all Points in a room")
     @GetMapping("/all")
     public ResponseEntity<List<Point>> getAllPointsByRoomId(@PathVariable("roomId") Long roomId) {
         var all = pointRepository.findAllByRoomId(roomId);
@@ -45,6 +47,7 @@ public class PointController {
     }
 
     // Получить место по ID
+    @Operation(summary = "Get Point by point_id and room_id")
     @GetMapping("/{id}") // лучше переделать или добавить получение по Number
     public ResponseEntity<?> getPointById(@PathVariable("roomId") Long roomId, @PathVariable("id") Long id) {
         Optional<Point> pointFromDb = pointRepository.findPointByRoomIdAndId(roomId, id);
@@ -55,6 +58,7 @@ public class PointController {
     }
 
     // Добавить место в комнату
+    @Operation(summary = "Create Points in a room")
     @PostMapping("/create")
     public ResponseEntity<?> createPoint(@PathVariable("roomId") Long roomId, @Valid @RequestBody Point point) {
         //проверить совпадение roomID из запроса и из обьекта передоваемого
@@ -62,7 +66,7 @@ public class PointController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newPoint);// через ExceptionHAndler ошибка приходит в виде dtoResponseErr
     }
 
-    /*обновить после пока у Point нет полей которыне можно обновить*/
+    /*обновить после, пока у Point нет полей которыне можно обновить, кроме number*/
 //    // Обновить информацию о рабочем месте by Number
 //    @PutMapping("/{number}")
 //    public ResponseEntity<?> updatePointByNumber(@PathVariable("roomId") Long roomId, @PathVariable("number") Integer number, @RequestBody Point point, BindingResult bindingResult) {
@@ -80,6 +84,7 @@ public class PointController {
 //    }
 
     // Удалить рабочее место
+    @Operation(summary = "Delete Point by point_number")
     @DeleteMapping("/{number}")
     public ResponseEntity<?> deleteDeskByNumber(@PathVariable("roomId") Long roomId, @PathVariable("number") Integer number) {
         Optional<Point> pointFromDb = pointRepository.findPointByRoomIdAndNumber(roomId, number);
@@ -92,6 +97,7 @@ public class PointController {
     }
 
     // Проверить доступность рабочего места
+    @Operation(summary = "Check availability Points by point_id")
     @PostMapping("/{pointId}/available") // можно GET и передавать время через @RequestParam ?
     public boolean checkPointAvailabilityById(@PathVariable("roomId") Long roomId, @PathVariable("pointId") Long pointId, @Valid @RequestBody BookingTimeDto bookingTimeDto) {
         return pointService.isAvailablePoint(roomId, pointId, bookingTimeDto);

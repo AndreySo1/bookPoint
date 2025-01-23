@@ -23,7 +23,7 @@ public class Point { //Point (id, roomId, number, *type).
 
 //    @Column(unique = true) // не подойдет, может быть одинаковый номер в разных комнатах
     @NotNull
-    private Integer number;
+    private Integer number;//добавить валидацию мах символов, только цифры
 
     @ManyToOne//v2
     @JoinColumn(name = "room_id", nullable = false) // Связываем с Room

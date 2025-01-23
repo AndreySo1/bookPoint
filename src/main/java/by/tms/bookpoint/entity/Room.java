@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-public class Room { //Room (id, name,points *location)
+public class Room { //Room (id, name,pointsб *location_info, capacity)
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class Room { //Room (id, name,points *location)
     @NotNull
     @NotEmpty
     @NotBlank
-    private String name;
+    private String name; //добавить валидацию мах мин символов
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true) //orphanRemoval если удаляем из списка, удалится и из Point
     private List<Point> points = new ArrayList<>();

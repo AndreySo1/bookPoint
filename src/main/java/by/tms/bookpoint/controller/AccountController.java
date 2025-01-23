@@ -54,7 +54,7 @@ public class AccountController {
 
     //    @ApiResponse(responseCode = "200", description = "request is successfully") // maybe annotation with @ApiResponse don't need
 //    @ApiResponse(responseCode = "400", description = "Staff Id not found")
-    @Operation(summary = "Find User by Id", description = "Finds User by Id")
+    @Operation(summary = "Find User by Id")
     @GetMapping("/{id}")
     public ResponseEntity<?> findStaffById(@PathVariable("id") Long id) {
         Optional<Account> accountFromDb = accountRepository.findById(id);
@@ -95,7 +95,7 @@ public class AccountController {
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "User not found"), HttpStatus.BAD_REQUEST);
     }
 
-    @Operation(summary = "Delete User by Id", description = "Delete User by Id")
+    @Operation(summary = "Delete User by Id")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteStaffById(@PathVariable("id") Long id) {
         Optional<Account> accountFromDb = accountRepository.findById(id);

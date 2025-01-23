@@ -1,9 +1,11 @@
 package by.tms.bookpoint.controller;
 
 import by.tms.bookpoint.dto.ErrorResponse;
+import by.tms.bookpoint.dto.RoomUpdateRequestDto;
 import by.tms.bookpoint.entity.Room;
 import by.tms.bookpoint.repository.RoomRepository;
 import by.tms.bookpoint.utils.ErrorsUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ public class RoomController {
     private ErrorsUtils errorsUtils;
 
     // Получить список всех комнат
+    @Operation(summary = "Get all Rooms")
     @GetMapping("/all")
     public ResponseEntity<List<Room>> getAllRooms() {
         var all = roomRepository.findAll();
@@ -34,6 +37,7 @@ public class RoomController {
     }
 
     // Получить конкретной комнатy
+    @Operation(summary = "Get Room by room_id")
     @GetMapping("/{id}")
     public ResponseEntity<?> getRoomById(@PathVariable("id") Long id) {
         Optional<Room> roomFromDb = roomRepository.findById(id);
@@ -44,6 +48,7 @@ public class RoomController {
     }
 
     // Добавить новую комнату
+    @Operation(summary = "Create Room ")
     @PostMapping("/create")
     public ResponseEntity<?> createRoom(@Valid @RequestBody Room room) {
         Optional<Room> roomFromDb = roomRepository.findByName(room.getName());
@@ -55,16 +60,16 @@ public class RoomController {
     }
 
     // Обновить информацию о комнате
+    @Operation(summary = "Update room by room_id")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateRoomById(@PathVariable("id") Long id, @Valid @RequestBody Room newRoom, BindingResult bindingResult) {
+    public ResponseEntity<?> updateRoomById(@PathVariable("id") Long id, @Valid @RequestBody RoomUpdateRequestDto roomUpdate, BindingResult bindingResult) {
         Optional<Room> roomFromDb = roomRepository.findById(id);
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(errorsUtils.errorsResponse(bindingResult), HttpStatus.BAD_REQUEST);
         }
         if (roomFromDb.isPresent()){
-            Room tempRoom = roomFromDb.get();
-            tempRoom.setName(newRoom.getName());
-            tempRoom.setPoints(newRoom.getPoints());
+            Room tempRoom = roomFromDb.get(); //попробовать сеттить сразу в roomFromDb, будет ли работать
+            tempRoom.setName(roomUpdate.getName());
             roomRepository.save(tempRoom);
             return ResponseEntity.ok(tempRoom);
         }
@@ -72,6 +77,7 @@ public class RoomController {
     }
 
     // Удалить комнату
+    @Operation(summary = "Delete room by room_id")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRoomById(@PathVariable("id") Long id) {
         Optional<Room> roomFromDb = roomRepository.findById(id);

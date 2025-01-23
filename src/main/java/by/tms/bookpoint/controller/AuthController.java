@@ -4,6 +4,7 @@ import by.tms.bookpoint.dto.AuthAccountDto;
 import by.tms.bookpoint.entity.Account;
 import by.tms.bookpoint.service.AccountService;
 import by.tms.bookpoint.utils.JwtUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,7 @@ public class AuthController {
 //        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 //    }
 
+    @Operation(summary = "Login to app, return auth token (jwt)")
     @PostMapping("/login") //v2
     public String login(@RequestBody AuthAccountDto dto) {
         Authentication authentication = authenticationManager.authenticate(

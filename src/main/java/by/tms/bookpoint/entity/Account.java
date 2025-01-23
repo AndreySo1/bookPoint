@@ -27,18 +27,18 @@ public class Account implements UserDetails {
     @NotNull
     @NotEmpty
     @NotBlank
-    private String name;
+    private String name;//добавить валидацию мах мин символов
 
     @Column (unique = true)
     @NotNull
     @NotEmpty
     @NotBlank
-    private String username;
+    private String username;//добавить валидацию мах мин символов
 
     @NotNull
     @NotEmpty
     @NotBlank
-    private String password;
+    private String password;//добавить валидацию мах мин символов
 
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> authorities = new HashSet<>();

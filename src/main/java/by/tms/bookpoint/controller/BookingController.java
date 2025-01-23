@@ -8,6 +8,7 @@ import by.tms.bookpoint.entity.Room;
 import by.tms.bookpoint.repository.BookingRepository;
 import by.tms.bookpoint.service.BookingService;
 import by.tms.bookpoint.utils.ErrorsUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class BookingController {
     private ErrorsUtils errorsUtils;
 
     // Получить список всех бронирований
+    @Operation(summary = "Get all bookings")
     @GetMapping("/all")
     public ResponseEntity<List<Booking>> getAllBookings() {
         var all = bookingRepository.findAll();
@@ -41,6 +43,7 @@ public class BookingController {
     }
 
     // Получить бронирование по Id
+    @Operation(summary = "Get booking by id")
     @GetMapping("/{id}")
     public ResponseEntity<?> getBookingById(@PathVariable("id") Long id) {
         Optional<Booking> bookingFromDb = bookingRepository.findById(id);
@@ -51,6 +54,7 @@ public class BookingController {
     }
 
     // Создать новое бронирование
+    @Operation(summary = "Create booking")
     @PostMapping("/create")
     public ResponseEntity<?> createBooking(@Valid @RequestBody BookingRequestDto booking) {
         Booking newBooking = bookingService.createBooking(booking);
@@ -58,13 +62,19 @@ public class BookingController {
     }
 
     //обновить данные бронирования по id
+    @Operation(summary = "Update booking by id")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePointByNumber(@PathVariable("id") Long id, @Valid @RequestBody Booking newBooking, BindingResult bindingResult) {
+    public ResponseEntity<?> updateBookingById(@PathVariable("id") Long id, @Valid @RequestBody Booking newBooking, BindingResult bindingResult) {
             Optional<Booking> bookingFromDb = bookingRepository.findById(id);
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(errorsUtils.errorsResponse(bindingResult), HttpStatus.BAD_REQUEST);
         }
-        if (bookingFromDb.isPresent()){ // вынести в BookingService и подумать может не все разрешить менять, и как буде работать валидация пересеченияс другими bookings
+        if (bookingFromDb.isPresent()){
+            /*
+             вынести в BookingService и подумать может не все разрешить менять,
+             какую DTO передовать в @RequestBody,
+             как буде работать валидация пересеченияс другими bookings(взять из Create)
+             */
             Booking tempBooking = bookingFromDb.get();
             tempBooking.setPoint(newBooking.getPoint());
             tempBooking.setAccount(newBooking.getAccount());
@@ -77,6 +87,7 @@ public class BookingController {
     }
 
     // Отменить бронирование
+    @Operation(summary = "Delete booking")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBookingById(@PathVariable("id") Long id) {
         Optional<Booking> bookingFromDb = bookingRepository.findById(id);
@@ -89,6 +100,5 @@ public class BookingController {
 
     // отменить все бронирование по Point (место не доступно/сломано/ликвидировано)
     // отмениьт все бронования по Account (пользователь забанен/уволен)
-
 
 }
