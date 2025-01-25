@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  app:
+    image: book-point_mvp
+    build:
+      context: .
+#    restart: on-failure
+    container_name: book-point-app
+    ports:
+      - '8080:8080'
+    environment:
+      SPRING_APPLICATION_NAME: bookPoint
+      SPRING_PROFILES_ACTIVE: prod
+#      SPRING_PROFILES_ACTIVE: dev
+#      SPRINGDOC_SWAGGER_UI_PATH: /doc
+#      SPRINGDOC_API_DOC_PATH: /api
+#      SPRINGDOC_SHOW_ACTUATOR: true
+#      SPRING_H2_CONSOLE_ENABLED: true
+#      SPRING_H2_CONSOLE_PATH: /db
+#      SPRING_H2_CONSOLE_SETTINGS_WEB_ALLOW_OTHERS: true
+
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: root
+#      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+#      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+#    restart: on-failure
+    container_name: pgsql
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
