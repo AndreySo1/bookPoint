@@ -48,7 +48,7 @@ public class RoomController {
     }
 
     // Добавить новую комнату
-    @Operation(summary = "Create Room ")
+    @Operation(summary = "Create Room")
     @PostMapping("/create")
     public ResponseEntity<?> createRoom(@Valid @RequestBody Room room) {
         Optional<Room> roomFromDb = roomRepository.findByName(room.getName());

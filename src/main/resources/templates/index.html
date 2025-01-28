@@ -64,35 +64,36 @@
     // Список эндпоинтов, сгруппированных по категориям
     const endpoints = {
         "Test to work": [
-            { name: "Get Api status", method: "GET", url: "/api/health" }
+            { name: "Health status", method: "GET", url: "/api/health" }
+        ],
+        "AccountController": [
+            { name: "Create Account (All)", method: "POST", url: "/account/create" },
+            { name: "Find all Accounts (User)", method: "GET", url: "/account/all" },
+            { name: "Find Account by Id (User)", method: "GET", url: "/account/{id}" },
+            { name: "Update Account by Id (User)", method: "PUT", url: "/account/{id}" },
+            { name: "Delete Account by Id (Admin)", method: "DELETE", url: "/account/{id}" }
         ],
         "RoomController": [
-            { name: "Get All Rooms", method: "GET", url: "/room/all" },
-            { name: "Get Room by ID", method: "GET", url: "/room/{id}" },
-            { name: "Create Room", method: "POST", url: "/room/create" },
-            { name: "Update Room", method: "PUT", url: "/room/{id}" },
-            { name: "Delete Room", method: "DELETE", url: "/room/{id}" }
+            { name: "Create Room (Admin)", method: "POST", url: "/room/create" },
+            { name: "Get All Rooms (All)", method: "GET", url: "/room/all" },
+            { name: "Get Room by room_id (All)", method: "GET", url: "/room/{id}" },
+            { name: "Update room by room_id (Admin)", method: "PUT", url: "/room/{id}" },
+            { name: "Delete room by room_id (Admin)", method: "DELETE", url: "/room/{id}" }
         ],
         "PointController": [
-            { name: "Get All Point in Room", method: "GET", url: "/room/{roomId}/point/all" },
-            { name: "Get Point in Room by Id", method: "GET", url: "/room/{roomId}/point/{id}" },
-            { name: "Create Point", method: "POST", url: "/room/{roomId}/point/create" },
+            { name: "Create Points in a room (User)", method: "POST", url: "/room/{roomId}/point/create" },
+            { name: "Get all Points in a room (All)", method: "GET", url: "/room/{roomId}/point/all" },
+            { name: "Get Point by point_id and room_id (All)", method: "GET", url: "/room/{roomId}/point/{id}" },
             // { name: "Update Point", method: "PUT", url: "/api/rooms/{roomId}/desks/{deskId}" },
-            { name: "Delete Point in Room by Number", method: "DELETE", url: "/room/{roomId}/point/number" },
-            // { name: "Check Desk Availability", method: "GET", url: "/api/rooms/{roomId}/desks/{deskId}/availability" }
+            { name: "Delete Point by point_number (User, Admin)", method: "DELETE", url: "/room/{roomId}/point/number" },
+            { name: "Check availability Points by point_id (All)", method: "POST", url: "/room/{roomId}/point/{pointId}/available" }
         ],
-        // "BookingController": [
-        //     { name: "Get All Bookings", method: "GET", url: "/api/bookings" },
-        //     { name: "Get Booking by ID", method: "GET", url: "/api/bookings/{id}" },
-        //     { name: "Create Booking", method: "POST", url: "/api/bookings" },
-        //     { name: "Cancel Booking", method: "DELETE", url: "/api/bookings/{id}" }
-        // ],
-        "UserController need review": [
-            { name: "Get All Users", method: "GET", url: "/api/users" },
-            { name: "Get User by ID", method: "GET", url: "/api/users/{id}" },
-            { name: "Create User", method: "POST", url: "/api/users" },
-            { name: "Update User", method: "PUT", url: "/api/users/{id}" },
-            { name: "Delete User", method: "DELETE", url: "/api/users/{id}" }
+        "BookingController": [
+            { name: "Get all bookings", method: "GET", url: "/booking/all" },
+            { name: "Get booking by id", method: "GET", url: "/booking/{id}" },
+            { name: "Create booking", method: "POST", url: "/booking/create" },
+            { name: "Update booking by id", method: "PUT", url: "/booking/{id}" },
+            { name: "Delete booking", method: "DELETE", url: "/booking/{id}" }
         ]
     };
 
@@ -159,7 +160,7 @@
             return;
         }
         // const baseUrl = "http://localhost:8080"; // здесь базовый URL
-        const baseUrl = "https://https://bookpoint-production.up.railway.app";
+        const baseUrl = "https://bookpoint-production.up.railway.app";
         const url = baseUrl + selectedEndpoint.url.replace(/\{.*?\}/g, "1"); // Замена {id} на тестовое значение
         const method = requestMethod.value;
         const body = requestBody.value;

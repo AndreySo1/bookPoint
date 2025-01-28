@@ -45,7 +45,7 @@ public class AccountController {
     @Autowired
     private ErrorsUtils errorsUtils;
 
-    @Operation(summary = "Find all User", description = "Find all User")
+    @Operation(summary = "Find all Accounts", description = "Find all Accounts")
     @GetMapping("/all")
     public ResponseEntity<List<Account>> all() {
         var all = accountRepository.findAll();
@@ -54,7 +54,7 @@ public class AccountController {
 
     //    @ApiResponse(responseCode = "200", description = "request is successfully") // maybe annotation with @ApiResponse don't need
 //    @ApiResponse(responseCode = "400", description = "Staff Id not found")
-    @Operation(summary = "Find User by Id")
+    @Operation(summary = "Find Account by Id")
     @GetMapping("/{id}")
     public ResponseEntity<?> findStaffById(@PathVariable("id") Long id) {
         Optional<Account> accountFromDb = accountRepository.findById(id);
@@ -64,7 +64,7 @@ public class AccountController {
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "User not found"), HttpStatus.BAD_REQUEST);
     }
 
-    @Operation(summary = "Crate User", description = "Crate User, send request with Account object")
+    @Operation(summary = "Crate Account", description = "Crate Account, send request with Account object")
     @PostMapping("/create")
     public ResponseEntity<?> createAccount(@RequestBody Account account) {
         Optional<Account> accountFromDb = accountRepository.findByUsername(account.getUsername());
@@ -77,7 +77,7 @@ public class AccountController {
 
     @ApiResponse(responseCode = "200", description = "request is successfully")
     @ApiResponse(responseCode = "400", description = "Request JSON have fail validation or Staff Id not found")
-    @Operation(summary = "Update Staff by Id", description = "Update Staff by Id, check validate Staff object and exists Id")
+    @Operation(summary = "Update Account by Id", description = "Update Account by Id, check validate Staff object and exists Id")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateStaffById(@PathVariable("id") Long id, @Valid @RequestBody Account newAccount, BindingResult bindingResult) {
         Optional<Account> accountFromDb = accountRepository.findById(id);
@@ -95,7 +95,7 @@ public class AccountController {
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "User not found"), HttpStatus.BAD_REQUEST);
     }
 
-    @Operation(summary = "Delete User by Id")
+    @Operation(summary = "Delete Account by Id")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteStaffById(@PathVariable("id") Long id) {
         Optional<Account> accountFromDb = accountRepository.findById(id);
