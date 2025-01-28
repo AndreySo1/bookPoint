@@ -158,7 +158,8 @@
             alert("Please select an endpoint first.");
             return;
         }
-        const baseUrl = "http://localhost:8080"; // здесь базовый URL
+        // const baseUrl = "http://localhost:8080"; // здесь базовый URL
+        const baseUrl = "https://https://bookpoint-production.up.railway.app";
         const url = baseUrl + selectedEndpoint.url.replace(/\{.*?\}/g, "1"); // Замена {id} на тестовое значение
         const method = requestMethod.value;
         const body = requestBody.value;
