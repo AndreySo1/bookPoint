@@ -71,24 +71,29 @@
 
   // Примеры JSON для каждого эндпоинта
   const exampleJson = {
+    "Login (All)": JSON.stringify({
+      "username": "login",
+      "password": "pass"
+    }, null, 2),
+
     "Create Account (All)": JSON.stringify({
-      "name": "And",
-      "username": "Andrey2",
+      "name": "Andrey",
+      "username": "testUsername",
       "password": "pass"
     }, null, 2),
 
     "Update Account by Id (User)": JSON.stringify({
-      "name": "And",
-      "username": "Andrey2",
+      "name": "Andrey",
+      "username": "testUsername",
       "password": "pass"
     }, null, 2),
 
     "Create Room (Admin)": JSON.stringify({
-      "name": "roomName2"
+      "name": "roomName1"
     }, null, 2),
 
     "Update room by room_id (Admin)": JSON.stringify({
-      "name": "roomName2"
+      "name": "roomName1"
     }, null, 2),
 
     "Create Points in a room (User)": JSON.stringify({
@@ -113,6 +118,9 @@
   const endpoints = {
     "Test to work": [
       { name: "Health status", method: "GET", url: "/api/health" }
+    ],
+    "AuthorisationController": [
+      { name: "Login (All)", method: "POST", url: "/auth/login" }
     ],
     "AccountController": [
       { name: "Create Account (All)", method: "POST", url: "/account/create" },
