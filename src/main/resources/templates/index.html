@@ -1,190 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API bookPoint</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            padding: 20px;
-        }
-        .endpoint-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        #version {
-            color: #a9a9a9;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API bookPoint</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding: 20px;
+    }
+    .endpoint-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    #version {
+      color: #a9a9a9;
+    }
+  </style>
 </head>
 <body>
 <div class="container">
-    <h1 class="mb-4">API bookPoint</h1>
-    <p id="version" class="mb-4">author: Andrei Saroka </br>version 1.0</p>
-    <div class="row">
-        <!-- Поле для JWT токена -->
-        <div class="col-12 mb-4">
-            <label for="jwtToken" class="form-label">JWT Token</label>
-            <input type="text" id="jwtToken" class="form-control" placeholder="Enter your JWT token here">
-        </div>
-
-        <!-- Список эндпоинтов -->
-        <div class="col-md-4">
-            <h4>Endpoints</h4>
-            <div class="accordion" id="endpointAccordion">
-                <!-- Категории эндпоинтов будут добавлены через JavaScript -->
-            </div>
-        </div>
-
-        <!-- Форма для запроса -->
-        <div class="col-md-8">
-            <h4>Request & Response</h4>
-            <div class="mb-3">
-                <label for="requestMethod" class="form-label">HTTP Method</label>
-                <select class="form-select" id="requestMethod">
-                    <option value="GET" selected>GET</option>
-                    <option value="POST">POST</option>
-                    <option value="PUT">PUT</option>
-                    <option value="DELETE">DELETE</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="requestBody" class="form-label">Request Body (JSON)</label>
-                <textarea class="form-control" id="requestBody" rows="5" placeholder="Enter JSON body for POST/PUT requests"></textarea>
-            </div>
-            <button class="btn btn-primary mb-3" id="sendRequest">Send Request</button>
-            <h5>Response:</h5>
-            <pre id="responseOutput" class="p-3 border bg-light" style="height: 300px; overflow-y: auto;"></pre>
-        </div>
+  <h1 class="mb-4">API bookPoint</h1>
+  <p id="version" class="mb-4">author: Andrei Saroka </br>version 1.0</p>
+  <div class="row">
+    <!-- Поле для JWT токена -->
+    <div class="col-12 mb-4">
+      <label for="jwtToken" class="form-label">JWT Token</label>
+      <input type="text" id="jwtToken" class="form-control" placeholder="Enter your JWT token here">
     </div>
+
+    <!-- Список эндпоинтов -->
+    <div class="col-md-4">
+      <h4>Endpoints</h4>
+      <div class="accordion" id="endpointAccordion">
+        <!-- Категории эндпоинтов будут добавлены через JavaScript -->
+      </div>
+    </div>
+
+    <!-- Форма для запроса -->
+    <div class="col-md-8">
+      <h4>Request & Response</h4>
+      <div class="mb-3">
+        <label for="requestMethod" class="form-label">HTTP Method</label>
+        <select class="form-select" id="requestMethod">
+          <option value="GET" selected>GET</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="DELETE">DELETE</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="endpointPath" class="form-label">Endpoint Path</label>
+        <input type="text" class="form-control" id="endpointPath" placeholder="Enter full endpoint path here">
+      </div>
+      <div class="mb-3">
+        <label for="requestBody" class="form-label">Request Body (JSON)</label>
+        <textarea class="form-control" id="requestBody" rows="5" placeholder="Enter JSON body for POST/PUT requests"></textarea>
+      </div>
+      <button class="btn btn-primary mb-3" id="sendRequest">Send Request</button>
+      <h5>Response:</h5>
+      <pre id="responseOutput" class="p-3 border bg-light" style="height: 300px; overflow-y: auto;"></pre>
+    </div>
+  </div>
 </div>
 
 <script>
-    // Список эндпоинтов, сгруппированных по категориям
-    const endpoints = {
-        "Test to work": [
-            { name: "Health status", method: "GET", url: "/api/health" }
-        ],
-        "AccountController": [
-            { name: "Create Account (All)", method: "POST", url: "/account/create" },
-            { name: "Find all Accounts (User)", method: "GET", url: "/account/all" },
-            { name: "Find Account by Id (User)", method: "GET", url: "/account/{id}" },
-            { name: "Update Account by Id (User)", method: "PUT", url: "/account/{id}" },
-            { name: "Delete Account by Id (Admin)", method: "DELETE", url: "/account/{id}" }
-        ],
-        "RoomController": [
-            { name: "Create Room (Admin)", method: "POST", url: "/room/create" },
-            { name: "Get All Rooms (All)", method: "GET", url: "/room/all" },
-            { name: "Get Room by room_id (All)", method: "GET", url: "/room/{id}" },
-            { name: "Update room by room_id (Admin)", method: "PUT", url: "/room/{id}" },
-            { name: "Delete room by room_id (Admin)", method: "DELETE", url: "/room/{id}" }
-        ],
-        "PointController": [
-            { name: "Create Points in a room (User)", method: "POST", url: "/room/{roomId}/point/create" },
-            { name: "Get all Points in a room (All)", method: "GET", url: "/room/{roomId}/point/all" },
-            { name: "Get Point by point_id and room_id (All)", method: "GET", url: "/room/{roomId}/point/{id}" },
-            // { name: "Update Point", method: "PUT", url: "/api/rooms/{roomId}/desks/{deskId}" },
-            { name: "Delete Point by point_number (User, Admin)", method: "DELETE", url: "/room/{roomId}/point/number" },
-            { name: "Check availability Points by point_id (All)", method: "POST", url: "/room/{roomId}/point/{pointId}/available" }
-        ],
-        "BookingController": [
-            { name: "Get all bookings", method: "GET", url: "/booking/all" },
-            { name: "Get booking by id", method: "GET", url: "/booking/{id}" },
-            { name: "Create booking", method: "POST", url: "/booking/create" },
-            { name: "Update booking by id", method: "PUT", url: "/booking/{id}" },
-            { name: "Delete booking", method: "DELETE", url: "/booking/{id}" }
-        ]
-    };
+  // const baseUrl = "http://localhost:8080";
+  const baseUrl = "https://bookpoint-dev.up.railway.app";
 
-    const endpointAccordion = document.getElementById("endpointAccordion");
-    const requestMethod = document.getElementById("requestMethod");
-    const requestBody = document.getElementById("requestBody");
-    const responseOutput = document.getElementById("responseOutput");
-    const sendRequestButton = document.getElementById("sendRequest");
-    const jwtTokenInput = document.getElementById("jwtToken");
+  // Примеры JSON для каждого эндпоинта
+  const exampleJson = {
+    "Create Account (All)": JSON.stringify({
+      "name": "And",
+      "username": "Andrey2",
+      "password": "pass"
+    }, null, 2),
 
-    let selectedEndpoint = null;
+    "Update Account by Id (User)": JSON.stringify({
+      "name": "And",
+      "username": "Andrey2",
+      "password": "pass"
+    }, null, 2),
 
-    // Заполнить список эндпоинтов по категориям
-    Object.keys(endpoints).forEach((category, index) => {
-        const categoryId = `category-${index}`;
-        const endpointsList = endpoints[category].map((endpoint, endpointIndex) => `
-                <li class="list-group-item list-group-item-action"
-                    data-url="${endpoint.url}"
-                    data-method="${endpoint.method}">
-                    ${endpoint.method} ${endpoint.name}
-                </li>
-            `).join("");
+    "Create Room (Admin)": JSON.stringify({
+      "name": "roomName2"
+    }, null, 2),
 
-        endpointAccordion.innerHTML += `
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="heading-${categoryId}">
-                        <button class="accordion-button collapsed" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#collapse-${categoryId}"
-                                aria-expanded="false" aria-controls="collapse-${categoryId}">
-                            ${category}
-                        </button>
-                    </h2>
-                    <div id="collapse-${categoryId}" class="accordion-collapse collapse"
-                         aria-labelledby="heading-${categoryId}">
-                        <div class="accordion-body">
-                            <ul class="list-group">
-                                ${endpointsList}
-                            </ul>
-                        </div>
+    "Update room by room_id (Admin)": JSON.stringify({
+      "name": "roomName2"
+    }, null, 2),
+
+    "Create Points in a room (User)": JSON.stringify({
+      "number": 3
+    }, null, 2),
+
+    "Check availability Points by point_id (All)": JSON.stringify({
+      "startTime": "2025-10-17T02:10:10.668Z",
+      "endTime": "2025-10-17T03:30:10.668Z"
+    }, null, 2),
+
+    "Create booking": JSON.stringify({
+      "pointId": 1,
+      "accountId": 1,
+      "startTime": "2025-10-17T07:10:10.668Z",
+      "endTime": "2025-10-17T08:30:10.668Z"
+    }, null, 2),
+
+
+  };
+
+  const endpoints = {
+    "Test to work": [
+      { name: "Health status", method: "GET", url: "/api/health" }
+    ],
+    "AccountController": [
+      { name: "Create Account (All)", method: "POST", url: "/account/create" },
+      { name: "Find all Accounts (User)", method: "GET", url: "/account/all" },
+      { name: "Find Account by Id (User)", method: "GET", url: "/account/{id}" },
+      { name: "Update Account by Id (User)", method: "PUT", url: "/account/{id}" },
+      { name: "Delete Account by Id (Admin)", method: "DELETE", url: "/account/{id}" }
+    ],
+    "RoomController": [
+      { name: "Create Room (Admin)", method: "POST", url: "/room/create" },
+      { name: "Get All Rooms (All)", method: "GET", url: "/room/all" },
+      { name: "Get Room by room_id (All)", method: "GET", url: "/room/{id}" },
+      { name: "Update room by room_id (Admin)", method: "PUT", url: "/room/{id}" },
+      { name: "Delete room by room_id (Admin)", method: "DELETE", url: "/room/{id}" }
+    ],
+    "PointController": [
+      { name: "Create Points in a room (User)", method: "POST", url: "/room/{roomId}/point/create" },
+      { name: "Get all Points in a room (All)", method: "GET", url: "/room/{roomId}/point/all" },
+      { name: "Get Point by point_id and room_id (All)", method: "GET", url: "/room/{roomId}/point/{id}" },
+      // { name: "Update Point", method: "PUT", url: "/api/rooms/{roomId}/desks/{deskId}" },
+      { name: "Delete Point by point_number (User, Admin)", method: "DELETE", url: "/room/{roomId}/point/number" },
+      { name: "Check availability Points by point_id (All)", method: "POST", url: "/room/{roomId}/point/{pointId}/available" }
+    ],
+    "BookingController": [
+      { name: "Get all bookings", method: "GET", url: "/booking/all" },
+      { name: "Get booking by id", method: "GET", url: "/booking/{id}" },
+      { name: "Create booking", method: "POST", url: "/booking/create" },
+      { name: "Update booking by id", method: "PUT", url: "/booking/{id}" },
+      { name: "Delete booking", method: "DELETE", url: "/booking/{id}" }
+    ]
+  };
+
+  const endpointAccordion = document.getElementById("endpointAccordion");
+  const requestMethod = document.getElementById("requestMethod");
+  const requestBody = document.getElementById("requestBody");
+  const endpointPath = document.getElementById("endpointPath");
+  const responseOutput = document.getElementById("responseOutput");
+  const sendRequestButton = document.getElementById("sendRequest");
+  const jwtTokenInput = document.getElementById("jwtToken");
+
+  let selectedEndpoint = null;
+
+  // Заполнение списка эндпоинтов
+  Object.keys(endpoints).forEach((category, index) => {
+    const categoryId = `category-${index}`;
+    const endpointsList = endpoints[category].map(endpoint => `
+            <li class="list-group-item list-group-item-action"
+                data-url="${endpoint.url}"
+                data-method="${endpoint.method}"
+                data-name="${endpoint.name}">
+                ${endpoint.method} ${endpoint.name}
+            </li>
+        `).join("");
+
+    endpointAccordion.innerHTML += `
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-${categoryId}">
+                    <button class="accordion-button collapsed" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#collapse-${categoryId}"
+                            aria-expanded="false" aria-controls="collapse-${categoryId}">
+                        ${category}
+                    </button>
+                </h2>
+                <div id="collapse-${categoryId}" class="accordion-collapse collapse"
+                     aria-labelledby="heading-${categoryId}">
+                    <div class="accordion-body">
+                        <ul class="list-group">
+                            ${endpointsList}
+                        </ul>
                     </div>
                 </div>
-            `;
-    });
+            </div>
+        `;
+  });
 
-    // Обработчик выбора эндпоинта
-    endpointAccordion.addEventListener("click", (event) => {
-        if (event.target.classList.contains("list-group-item")) {
-            selectedEndpoint = {
-                url: event.target.getAttribute("data-url"),
-                method: event.target.getAttribute("data-method")
-            };
-            requestMethod.value = selectedEndpoint.method;
-            requestBody.value = ""; // Очистить тело запроса
-            responseOutput.textContent = ""; // Очистить ответ
-            document.querySelectorAll(".list-group-item").forEach(el => el.classList.remove("active"));
-            event.target.classList.add("active");
+  // Обработчик выбора эндпоинта
+  endpointAccordion.addEventListener("click", event => {
+    if (event.target.classList.contains("list-group-item")) {
+      selectedEndpoint = {
+        url: event.target.getAttribute("data-url"),
+        method: event.target.getAttribute("data-method"),
+        name: event.target.getAttribute("data-name")
+      };
+      requestMethod.value = selectedEndpoint.method;
+      endpointPath.value = baseUrl + selectedEndpoint.url;
+      requestBody.value = exampleJson[selectedEndpoint.name] || ""; // Установить пример JSON для выбранного эндпоинта
+      responseOutput.textContent = "";
+      document.querySelectorAll(".list-group-item").forEach(el => el.classList.remove("active"));
+      event.target.classList.add("active");
+    }
+  });
+
+  // Обработчик отправки запроса
+  sendRequestButton.addEventListener("click", async () => {
+    if (!selectedEndpoint) {
+      alert("Please select an endpoint first.");
+      return;
+    }
+    const url = endpointPath.value.trim();
+    const method = requestMethod.value;
+    const body = requestBody.value;
+    const jwtToken = jwtTokenInput.value.trim();
+
+    try {
+      const options = {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          ...(jwtToken && { "Authorization": `Bearer ${jwtToken}` })
         }
-    });
+      };
+      if (method === "POST" || method === "PUT") {
+        options.body = body;
+      }
 
-    // Обработчик отправки запроса
-    sendRequestButton.addEventListener("click", async () => {
-        if (!selectedEndpoint) {
-            alert("Please select an endpoint first.");
-            return;
-        }
-        // const baseUrl = "http://localhost:8080"; // здесь базовый URL
-        const baseUrl = "https://bookpoint-production.up.railway.app";
-        const url = baseUrl + selectedEndpoint.url.replace(/\{.*?\}/g, "1"); // Замена {id} на тестовое значение
-        const method = requestMethod.value;
-        const body = requestBody.value;
-        const jwtToken = jwtTokenInput.value.trim();
-
-        try {
-            const options = {
-                method,
-                headers: {
-                    "Content-Type": "application/json",
-                    ...(jwtToken && { "Authorization": `Bearer ${jwtToken}` }) // Добавить токен если он введен
-                },
-            };
-            if (method === "POST" || method === "PUT") {
-                options.body = body;
-            }
-
-            const response = await fetch(url, options);
-            const data = await response.json();
-            responseOutput.textContent = JSON.stringify(data, null, 2);
-        } catch (error) {
-            responseOutput.textContent = `Error: ${error.message}`;
-        }
-    });
+      const response = await fetch(url, options);
+      const data = await response.json();
+      responseOutput.textContent = JSON.stringify(data, null, 2);
+    } catch (error) {
+      responseOutput.textContent = `Error: ${error.message}`;
+    }
+  });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
