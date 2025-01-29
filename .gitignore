@@ -1,4 +1,6 @@
 HELP.md
+#Dockerfile
+#docker-compose.yml
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -32,6 +34,3 @@ build/
 ### VS Code ###
 .vscode/
 
-### my ###
-Dockerfile
-docker-compose.yml
