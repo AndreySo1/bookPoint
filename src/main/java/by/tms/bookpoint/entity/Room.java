@@ -28,6 +28,12 @@ public class Room { //Room (id, name,pointsб *location_info, capacity)
     @NotBlank
     private String name; //добавить валидацию мах мин символов
 
+    @Column
+    @NotNull
+    @NotEmpty
+    @NotBlank
+    private String description;
+
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true) //orphanRemoval если удаляем из списка, удалится и из Point
     private List<Point> points = new ArrayList<>();
 }
