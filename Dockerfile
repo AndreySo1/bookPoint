@@ -14,4 +14,4 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar /app/app.jar
 #ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ENTRYPOINT ["java", "-jar", "/app/app.jar", "--spring.profiles.active=dev"]
-#ненужна если подключаем dependency docker-compose , или прописываем в environment
+#ненужна если подключаем dependency docker-compose , или прописываем в environment;
