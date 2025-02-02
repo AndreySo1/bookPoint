@@ -15,15 +15,11 @@ public class IndexController {
     private Environment environment;
     @GetMapping
     public String index(Model model) {
-
-//        String environment = System.getenv("ENV_MODE");
         String env = environment.getProperty("spring.profiles.active");
         String baseUrl = "https://bookpoint-dev.up.railway.app";
-
         if (env == "prod") {
             baseUrl = "https://bookpoint-production.up.railway.app";
         }
-
         model.addAttribute("baseUrl", baseUrl);
         return "index";
     }
