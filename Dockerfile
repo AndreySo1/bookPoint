@@ -3,9 +3,7 @@
 #COPY /target/*.jar /app.jar
 #ENTRYPOINT ["java", "-jar", "/app.jar"]
 
-#ARG RAILWAY_ENVIRONMENT_NAME=dev
-ARG MY_ARG=${RAILWAY_ENVIRONMENT_NAME}
-ENV ENV_MODE=${MY_ARG}
+#ENV ENV_MODE=${RAILWAY_ENVIRONMENT_NAME}
 
 FROM maven:3.9.9-eclipse-temurin-17-alpine AS build
 WORKDIR /app
