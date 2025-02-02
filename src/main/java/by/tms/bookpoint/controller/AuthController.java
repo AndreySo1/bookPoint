@@ -1,6 +1,7 @@
 package by.tms.bookpoint.controller;
 
 import by.tms.bookpoint.dto.AuthAccountDto;
+import by.tms.bookpoint.dto.AuthResponseDto;
 import by.tms.bookpoint.entity.Account;
 import by.tms.bookpoint.service.AccountService;
 import by.tms.bookpoint.utils.JwtUtils;
@@ -49,10 +50,12 @@ public class AuthController {
 
     @Operation(summary = "Login to app, return auth token (jwt)")
     @PostMapping("/login") //v2
-    public String login(@RequestBody AuthAccountDto dto) {
+//    public String login(@RequestBody AuthAccountDto dto) {
+    public ResponseEntity<?> login(@RequestBody AuthAccountDto dto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return jwtUtils.generateToken(userDetails.getUsername());
+//        return jwtUtils.generateToken(userDetails.getUsername());
+        return new ResponseEntity<>(new AuthResponseDto(HttpStatus.OK.value(), jwtUtils.generateToken(userDetails.getUsername())), HttpStatus.OK);
     }
 }
