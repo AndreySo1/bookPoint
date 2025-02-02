@@ -6,6 +6,7 @@
 * Spring Data JPA
 * Spring Security (JWT)
 * PostgreSQL(prod), H2(dev)
+* Flyway (migration)
 * Springdoc(Swagger)
 * Docker
 * Docker Compose
