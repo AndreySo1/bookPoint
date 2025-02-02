@@ -11,7 +11,7 @@ public class IndexController {
     @GetMapping
     public String index(Model model) {
 
-        String environment = System.getenv("ENVIRONMENT");
+        String environment = System.getenv("ENV_MODE");
         String baseUrl = "https://bookpoint-dev.up.railway.app";
 
         if (environment == "prod") {
