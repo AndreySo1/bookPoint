@@ -12,5 +12,5 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17-slim AS image
 WORKDIR /app
 COPY --from=build /app/target/*.jar /app/app.jar
-ENTRYPOINT ["java", "-jar", "/app/app.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar", "${NODE_ENV}"]
 #ненужна если подключаем dependency docker-compose , или прописываем в environment;
