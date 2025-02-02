@@ -11,20 +11,7 @@ services:
       - '8080:8080'
     environment:
       SPRING_APPLICATION_NAME: bookPoint
-      SPRING_PROFILES_ACTIVE: prod
-#      SPRING_PROFILES_ACTIVE: dev
-#      SPRINGDOC_SWAGGER_UI_PATH: /doc
-#      SPRINGDOC_API_DOC_PATH: /api
-#      SPRINGDOC_SHOW_ACTUATOR: true
-#      SPRING_H2_CONSOLE_ENABLED: true
-#      SPRING_H2_CONSOLE_PATH: /db
-#      SPRING_H2_CONSOLE_SETTINGS_WEB_ALLOW_OTHERS: true
-
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
-#      SPRING_DATASOURCE_USERNAME: postgres
-#      SPRING_DATASOURCE_PASSWORD: root
-#      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-#      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_PROFILES_ACTIVE: dev
     depends_on:
       - db
 
