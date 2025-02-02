@@ -1,4 +1,5 @@
 ### Test booking service
+### Version: 1.1.1
 #### using:
 * Maven
 * Java 17
