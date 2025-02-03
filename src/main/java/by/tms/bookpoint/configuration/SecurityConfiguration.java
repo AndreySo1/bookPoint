@@ -42,14 +42,20 @@ public class SecurityConfiguration {
                 .formLogin(AbstractHttpConfigurer::disable) //*
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) //db H2 for dev
                 .authorizeHttpRequests(e -> e
+//                        .requestMatchers(HttpMethod.GET, "/**","/auth/login").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/account/create","/auth/login").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/**").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, SecurityEndpoints.publicGET()).permitAll()
                         .requestMatchers(HttpMethod.POST, SecurityEndpoints.publicPOST()).permitAll()
                         .requestMatchers(SecurityEndpoints.publicALL()).permitAll() //db H2 for dev
-                        .requestMatchers(SecurityEndpoints.userAccess()).hasRole("USER")
-                        .requestMatchers(HttpMethod.GET, SecurityEndpoints.userAccessGet()).hasRole("USER")
-                        .requestMatchers(HttpMethod.POST, SecurityEndpoints.userAccessPost()).hasRole("USER")
-                        .requestMatchers(HttpMethod.PUT, SecurityEndpoints.userAccessPut()).hasRole("USER")
-                        .requestMatchers("/**").hasRole("ADMIN")
+                        .requestMatchers(SecurityEndpoints.userAccess()).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, SecurityEndpoints.userAccessGet()).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, SecurityEndpoints.userAccessPost()).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, SecurityEndpoints.userAccessPut()).hasAnyRole("USER", "ADMIN")
+//                        .requestMatchers(HttpMethod.GET,"/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST,"/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.PUT,"/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/**").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.GET, "/api/user/**").hasAnyRole("USER", "ADMIN")
 //                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasAuthority("ADMIN")

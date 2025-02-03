@@ -21,9 +21,10 @@ public class SecurityEndpoints {
         return new String[]{
                 "/",
                 "/api/health",
-                "/account/all",
+                "/account/**",
                 "/room/all",
                 "/room/*/point/**",
+                "/booking/all",
         };
     }
 
