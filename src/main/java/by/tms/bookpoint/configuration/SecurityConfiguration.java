@@ -47,7 +47,12 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, SecurityEndpoints.publicPOST()).permitAll()
                         .requestMatchers(SecurityEndpoints.publicALL()).permitAll() //db H2 for dev
 //                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasRole("ADMIN")
+                        .requestMatchers(SecurityEndpoints.userAccess()).hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, SecurityEndpoints.userAccessGet()).hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, SecurityEndpoints.userAccessPost()).hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, SecurityEndpoints.userAccessPut()).hasRole("USER")
+                        .requestMatchers("/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.GET, "/api/user/**").hasAnyRole("USER", "ADMIN")
 //                        .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
 //                        .requestMatchers(HttpMethod.POST, "/account/**", "/auth/**").permitAll()
