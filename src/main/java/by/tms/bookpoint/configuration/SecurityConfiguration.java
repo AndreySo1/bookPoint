@@ -42,21 +42,27 @@ public class SecurityConfiguration {
                 .formLogin(AbstractHttpConfigurer::disable) //*
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) //db H2 for dev
                 .authorizeHttpRequests(e -> e
-//                        .requestMatchers(SecurityEndpoints.publicALL()).permitAll() //db H2 for dev
+//                        .requestMatchers(HttpMethod.GET, "/**","/auth/login").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/account/create","/auth/login").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/**").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, SecurityEndpoints.publicGET()).permitAll()
                         .requestMatchers(HttpMethod.POST, SecurityEndpoints.publicPOST()).permitAll()
                         .requestMatchers(SecurityEndpoints.publicALL()).permitAll() //db H2 for dev
-//                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasRole("ADMIN")
+//                        .requestMatchers(SecurityEndpoints.userAccess()).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, SecurityEndpoints.userAccessGet()).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, SecurityEndpoints.userAccessPost()).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, SecurityEndpoints.userAccessPut()).hasAnyRole("USER", "ADMIN")
+//                        .requestMatchers(HttpMethod.GET,"/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST,"/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.PUT,"/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,SecurityEndpoints.adminDELETE()).hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.GET, "/api/user/**").hasAnyRole("USER", "ADMIN")
-//                        .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
+//                        .requestMatchers(HttpMethod.DELETE,"/account/**").hasAuthority("ADMIN")
 //                        .requestMatchers(HttpMethod.POST, "/account/**", "/auth/**").permitAll()
-//                        .requestMatchers("/db/**").permitAll() //db H2 for dev
-//                        .requestMatchers("/admin/**").hasRole("ADMIN") //*
-//                        .requestMatchers("/endpoint").hasAuthority("USER") //*
                         .anyRequest().authenticated())
                 .exceptionHandling(c ->
-                        c.authenticationEntryPoint(authenticationEntryPoint())) //не работает , статус 200 без токена
+                        c.authenticationEntryPoint(authenticationEntryPoint()))
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
