@@ -47,6 +47,7 @@ public class SecurityEndpoints {
     public static String[] userAccessGet() {
         return new String[]{
                 "/account/**",
+                "/**", //delete after
         };
     }
 
@@ -54,6 +55,7 @@ public class SecurityEndpoints {
         return new String[]{
                 "/account/create",
                 "/room/*/point/*/available",
+                "/**", //delete after
         };
     }
 
@@ -61,6 +63,7 @@ public class SecurityEndpoints {
         return new String[]{
                 "/account/**",
                 "/booking/**",
+                "/**", //delete after
         };
     }
 
