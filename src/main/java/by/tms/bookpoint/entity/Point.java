@@ -21,12 +21,11 @@ public class Point { //Point (id, roomId, number, *type).
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(unique = true) // не подойдет, может быть одинаковый номер в разных комнатах
     @NotNull
     private Integer number;//добавить валидацию мах символов, только цифры
 
     @ManyToOne//v2
-    @JoinColumn(name = "room_id", nullable = false) // Связываем с Room
+    @JoinColumn(name = "room_id", nullable = false)
     @JsonIgnore //чтобы не зацикливалось в респонссе
     private Room room;
 

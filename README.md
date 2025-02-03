@@ -1,16 +1,17 @@
-### Test booking service
-### Version: 1.1.1
+### Booking service API
+###### Version: 1.1.1
+###### Author: Andrei Saroka
 #### using:
 * Maven
 * Java 17
 * Spring Boot
 * Spring Data JPA
 * Spring Security (JWT)
+* Thymeleaf
 * PostgreSQL(prod), H2(dev)
 * Flyway (migration)
 * Springdoc(Swagger)
-* Docker
-* Docker Compose
+* Docker / Docker Compose
 * Deploy platform: Railway(PaaS)
 * Rest API
 

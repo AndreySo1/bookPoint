@@ -3,8 +3,6 @@ package by.tms.bookpoint.controller;
 import by.tms.bookpoint.dto.BookingRequestDto;
 import by.tms.bookpoint.dto.ErrorResponse;
 import by.tms.bookpoint.entity.Booking;
-import by.tms.bookpoint.entity.Point;
-import by.tms.bookpoint.entity.Room;
 import by.tms.bookpoint.repository.BookingRepository;
 import by.tms.bookpoint.service.BookingService;
 import by.tms.bookpoint.utils.ErrorsUtils;
