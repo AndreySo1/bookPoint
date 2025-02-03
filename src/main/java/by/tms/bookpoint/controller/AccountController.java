@@ -1,34 +1,26 @@
 package by.tms.bookpoint.controller;
 
 import by.tms.bookpoint.dto.ErrorResponse;
-import by.tms.bookpoint.dto.ErrorResponseMap;
 import by.tms.bookpoint.repository.AccountRepository;
 import by.tms.bookpoint.utils.ErrorsUtils;
-import by.tms.bookpoint.utils.JwtUtils;
-import by.tms.bookpoint.dto.AuthAccountDto;
 import by.tms.bookpoint.entity.Account;
 import by.tms.bookpoint.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Tag(name = "Account Resource")
 @RestController
 @RequestMapping("/account")
-//@RequiredArgsConstructor //*1 генерация конструктора для всех необходимых полей
 public class AccountController {
 
     @Autowired
@@ -36,11 +28,6 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
-
-//    private final AccountService accountService; //*1 вместо варианта выше , ломбок генерит конструктор
-
-    @Autowired
-    private  JwtUtils jwtUtils;
 
     @Autowired
     private ErrorsUtils errorsUtils;
@@ -52,8 +39,6 @@ public class AccountController {
         return ResponseEntity.ok(all);
     }
 
-    //    @ApiResponse(responseCode = "200", description = "request is successfully") // maybe annotation with @ApiResponse don't need
-//    @ApiResponse(responseCode = "400", description = "Staff Id not found")
     @Operation(summary = "Find Account by Id")
     @GetMapping("/{id}")
     public ResponseEntity<?> findStaffById(@PathVariable("id") Long id) {

@@ -36,11 +36,6 @@ public class PointService {
             throw new RuntimeException("Point with this number already exists in the room");
         }
 
-//        // Создаём Point //v2
-//        Point point2 = new Point();
-//        point2.setNumber(point.getNumber());
-//        point2.setRoom(room);
-
 //         Устанавливаем value в Point
         point.setRoom(room);
 
@@ -53,15 +48,6 @@ public class PointService {
     }
 
     public Boolean isAvailablePoint(Long roomId, Long pointId, BookingTimeDto bookingTimeDto){
-//        // Ищем Room по ID
-//        Room room = roomRepository.findById(roomId)
-//                .orElseThrow(() -> new RuntimeException("Room not found"));
-
-//        Point point = pointRepository.findById(pointId)
-//                .orElseThrow(() -> new IllegalArgumentException("Point not found"));
-
-//        Point point = pointRepository.findByRoomAndId(room, pointId)
-//                .orElseThrow(() -> new IllegalArgumentException("Point not found in this room"));
 
         Point point = pointRepository.findPointByRoomIdAndId(roomId, pointId)
                 .orElseThrow(() -> new IllegalArgumentException("Point not found in this room"));

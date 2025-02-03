@@ -17,7 +17,7 @@ public class IndexController {
     public String index(Model model) {
         String env = environment.getProperty("spring.profiles.active");
         String baseUrl = "https://bookpoint-dev.up.railway.app";
-        if (env == "prod") {
+        if (env.equals("prod")) {
             baseUrl = "https://bookpoint-production.up.railway.app";
         }
         model.addAttribute("baseUrl", baseUrl);

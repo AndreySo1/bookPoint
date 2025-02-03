@@ -30,16 +30,8 @@ public class BookingService {
 
     public Booking createBooking(BookingRequestDto booking){
 
-//        // Проверяем существование рабочего места
-//        Point point = pointRepository.findById(booking.getPoint().getId())
-//                .orElseThrow(() -> new IllegalArgumentException("Point not found"));// Проверяем существование рабочего места
-
         Point point = pointRepository.findById(booking.getPointId())
                 .orElseThrow(() -> new IllegalArgumentException("Point not found"));
-
-//        // Проверяем существование пользователя
-//        Account account = accountRepository.findById(booking.getAccount().getId())
-//                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
 
         Account account = accountRepository.findById(booking.getAccountId())
                 .orElseThrow(() -> new IllegalArgumentException("Account not found"));
@@ -77,8 +69,6 @@ public class BookingService {
 
         //добавить проверку на количество броней в день, например не больше 2х
 
-        // Сохраняем бронирование
-//        return bookingRepository.save(booking);
         return bookingRepository.save(newBooking);
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-public class Room { //Room (id, name,pointsб *location_info, capacity)
+public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
