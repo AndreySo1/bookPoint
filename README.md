@@ -16,8 +16,8 @@
 * Rest API
 
 #### Environment:
-* Dev(using H2):  [bookpoint-dev.up.railway.app](https://bookpoint-dev.up.railway.app)
-* Prod(using PostgreSQL):  [bookpoint-production.up.railway.app](https://bookpoint-production.up.railway.app)
+* Dev(using H2), paused: [bookpoint-dev.up.railway.app](https://bookpoint-dev.up.railway.app)
+* Prod(using PostgreSQL), paused: [bookpoint-production.up.railway.app](https://bookpoint-production.up.railway.app)
 
 #### Swagger:
 * path to documentation: baseUrl + /doc 
